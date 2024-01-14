@@ -1,8 +1,14 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-  UserInfo:{},
-  NewUser:false
+  UserInfo:{
+    name:"",
+    email:"",
+    profileImage:"/default_avatar.png",
+    status:"",
+    about:"Hi there! i am using whatsApp",
+    NewUser:""
+  }
 };
 
 const UserSlice = createSlice({
@@ -10,18 +16,38 @@ const UserSlice = createSlice({
   initialState,
   reducers: {
     setUserInfo: (state, action) => {
-      console.log(action.payload);
-      state.UserInfo = action.payload; // Update state.UserInfo
-      console.log(state.UserInfo); // Access state.UserInfo
-    },
-    setIsNewUser: (state, action) => {
-      state.NewUser = action.payload;
-    },
+      if(action.payload.name){
+        state.UserInfo.name = action.payload.name;
+      }
+      if(action.payload.email){
+        state.UserInfo.email = action.payload.email;
+      }
+      if(action.payload.profileImage){
+        console.log(action.payload)
+        state.UserInfo.profileImage = action.payload.profileImage;
+      }
+      if(action.payload.status){
+        state.UserInfo.status = action.payload.status;
+      }
+      if(action.payload.about){
+        state.UserInfo.about = action.payload.about;
+      }
+      if(action.payload.NewUser){
+        state.UserInfo.NewUser = action.payload.NewUser;
+      }
+      // console.log(action.payload);
+      // state.UserInfo = action.payload; 
+      // console.log(state.UserInfo);
+      // console.log(action.payload)
+    }
+    // setIsNewUser: (state, action) => {
+    //   state.NewUser = action.payload;
+    // },
   },
 });
 
 
 
-export const {setUserInfo , setIsNewUser} = UserSlice.actions;
+export const {setUserInfo } = UserSlice.actions;
 
 export default UserSlice.reducer;
