@@ -75,7 +75,7 @@ function Avatar({ type, image, setimage }) {
 
       {type == "sm" && (
         <div className="context-openers relative h-10 w-10">
-          <Image src={UserInfo?.profileImage} className="rounded-full" alt="avatar" width={15} />
+          <Image src={UserInfo?.profileImage} className="rounded-full" alt="avatar" width={50} height={50}/>
         </div>
       )}
       {type == "lg" && (

@@ -40,9 +40,6 @@ const UserSlice = createSlice({
       // console.log(state.UserInfo);
       // console.log(action.payload)
     }
-    // setIsNewUser: (state, action) => {
-    //   state.NewUser = action.payload;
-    // },
   },
 });
 

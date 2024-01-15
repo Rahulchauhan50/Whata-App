@@ -13,6 +13,7 @@ function onboarding() {
   const router = useRouter();
   const { UserInfo } = useSelector((state) => state.user)
   const dispatch = useDispatch();
+
   const onBoardUserHandler = async () => {
     if(validateDetails()){
       const email = UserInfo?.email;
@@ -24,11 +25,11 @@ function onboarding() {
         about:UserInfo.about,
         image:UserInfo.profileImage,
         })
-        if(data.Success){
+        if(data.status){
           router.push('/')
         }
       } catch (error) {
-        
+        console.log(error)
       }
     }
   }
