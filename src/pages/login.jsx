@@ -9,8 +9,6 @@ import { CHECK_USER_ROUTE } from "@/utils/ApiRoutes";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import { setUserInfo } from '@/redux/features/userSlice';
-import { setIsNewUser } from '@/redux/features/userSlice';
-import { useEffect } from 'react';
 
 function login() {
   const router = useRouter();
@@ -28,6 +26,8 @@ function login() {
         if(!data.status){
          dispatch(setUserInfo({name:user.displayName,email:user.email,profileImage:user.photoURL, status:"available", NewUser:true}));
          router.push("/onboarding")
+        }else if(data.status){
+          router.push("/")
         }
       }
       

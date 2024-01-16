@@ -7,8 +7,11 @@ const initialState = {
     profileImage:"/default_avatar.png",
     status:"",
     about:"Hi there! i am using whatsApp",
-    NewUser:""
-  }
+    NewUser:"",
+    id:undefined
+  },
+  ConstactPage:false,
+  CurrentChatUser:undefined
 };
 
 const UserSlice = createSlice({
@@ -23,7 +26,6 @@ const UserSlice = createSlice({
         state.UserInfo.email = action.payload.email;
       }
       if(action.payload.profileImage){
-        console.log(action.payload)
         state.UserInfo.profileImage = action.payload.profileImage;
       }
       if(action.payload.status){
@@ -35,16 +37,25 @@ const UserSlice = createSlice({
       if(action.payload.NewUser){
         state.UserInfo.NewUser = action.payload.NewUser;
       }
+      if(action.payload.id){
+        state.UserInfo.id = action.payload.id;
+      }
       // console.log(action.payload);
       // state.UserInfo = action.payload; 
       // console.log(state.UserInfo);
       // console.log(action.payload)
+    },
+    setConstactPage:(state, action) => {
+      state.ConstactPage = !state.ConstactPage;
+    },
+    setCurrentChatUser:(state, action)=>{
+      state.CurrentChatUser = action.payload.data;
     }
   },
 });
 
 
 
-export const {setUserInfo } = UserSlice.actions;
+export const {setUserInfo, setConstactPage, setCurrentChatUser} = UserSlice.actions;
 
 export default UserSlice.reducer;

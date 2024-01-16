@@ -21,9 +21,9 @@ function index() {
         if(!data.status){
           router.push('/login')
         }
-        console.log(data)
-        console.log(currentUser)
-        dispatch(setUserInfo({name:data.data.name,email:data.data.email,profileImage:data.data.profileImage, status:"available",NewUser:false}));
+        else if(data.status){
+          dispatch(setUserInfo({name:data.data.name,email:data.data.email,profileImage:data.data.profileImage, status:"available",NewUser:false,id:data.data.id}));
+        }
       }
   })
   return <Main/>;

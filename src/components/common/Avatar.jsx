@@ -75,12 +75,12 @@ function Avatar({ type, image, setimage }) {
 
       {type == "sm" && (
         <div className="context-openers relative h-10 w-10">
-          <Image src={UserInfo?.profileImage} className="rounded-full" alt="avatar" width={50} height={50}/>
+          <Image src={image} className="rounded-full" alt="avatar" width={50} height={50}/>
         </div>
       )}
       {type == "lg" && (
         <div className="context-openers relative h-14 w-14">
-          <Image src={UserInfo?.profileImage} className="rounded-full" alt="avatar" width={15} height={20}/>
+          <Image src={image} className="rounded-full" alt="avatar" width={50} height={50}/>
         </div>
       )}
       {type == "xl" && (
@@ -90,7 +90,7 @@ function Avatar({ type, image, setimage }) {
             <span className="context-openers">Change profile photo</span>
           </div>
         <div onClick={e=>showContextMenu(e)} className="context-openers flex items-center h-60 w-60">
-          <Image src={UserInfo?.profileImage} className="context-openers rounded-full" alt="avatar" height={250} width={250}/>
+          <Image src={image} className="context-openers rounded-full" alt="avatar" height={250} width={250}/>
         </div>
         </div>
       )}

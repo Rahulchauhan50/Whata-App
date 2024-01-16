@@ -10,3 +10,14 @@
 .custom-scrollbar::-webkit-scrollbar-thumb{
     background-color: #ffffff3b;
 }
+
+.custom-scrollbar-color::-webkit-scrollbar{
+    /* color: #AEBAC1; */
+    background-color: transparent;
+}
+
+.custom-scrollbar-color::-webkit-scrollbar-thumb{
+    /* background-color: #202C33; */
+    border-radius: 10px;
+    width: 10px;
+}
