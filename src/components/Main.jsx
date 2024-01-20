@@ -30,16 +30,17 @@ function Main() {
     }
   },[UserInfo?.id])
 
+  
 
   useEffect(()=>{
-    if(socket.current){
-      socket.current.on("msg-recieve",(data)=>{
-        alert("sdgj")
-        dispatch(setAddMessages({senderId:UserInfo?.id,message:Message,recieverId:CurrentChatUser?.id,type:"text",createAt:Date.now()}))
+    // if(socket.current){
+      socket?.current?.on("msg-recieve",(data)=>{
+        alert(data)
+        dispatch(setAddMessages(data))
       })
-      setsocketEvent(true);
-    }
-  },[socket.current])
+    //   setsocketEvent(true);
+    // }
+  },[socket?.current])
 
   useEffect(()=>{
     const getMessages = async () => {

@@ -23,11 +23,7 @@ function MessageBar({socket}) {
         message:Message
       })
       dispatch(setAddMessages({senderId:UserInfo?.id,message:Message,recieverId:CurrentChatUser?.id,type:"text",createAt:Date.now()}))
-      socket.current.emit("send-msg",{
-        to:CurrentChatUser?.id,
-        from:UserInfo?.id,
-        message:data.message
-      })
+      socket.current.emit("send-msg",{senderId:UserInfo?.id,message:Message,recieverId:CurrentChatUser?.id,type:"text",createAt:Date.now()})
       setMessage("")
     } catch (err) {
       console.log(err)
