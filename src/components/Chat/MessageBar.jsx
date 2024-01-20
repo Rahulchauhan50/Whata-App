@@ -4,23 +4,31 @@ import React, { useState } from "react";
 import { BsEmojiSmile } from "react-icons/bs";
 import { ImAttachment } from 'react-icons/im'
 import { MdSend } from "react-icons/md";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { setAddMessages } from "@/redux/features/userSlice";
 
-function MessageBar() {
+function MessageBar({socket}) {
   const [Message, setMessage] = useState('');
   const { UserInfo } = useSelector((state) => state.user)
   const { CurrentChatUser } = useSelector((state) => state.user)
+  const dispatch = useDispatch()
+  // const { socket } = useSelector((state) => state.user)
 
   const sendMessage = async(e) => {
     e.preventDefault();
-    console.log(UserInfo)
-    console.log(CurrentChatUser)
     try {
       const {data} = await axios.post(ADD_MESSAGE_ROUTE,{
         to:CurrentChatUser?.id,
         from:UserInfo?.id,
         message:Message
       })
+      dispatch(setAddMessages({senderId:UserInfo?.id,message:Message,recieverId:CurrentChatUser?.id,type:"text",createAt:Date.now()}))
+      socket.current.emit("send-msg",{
+        to:CurrentChatUser?.id,
+        from:UserInfo?.id,
+        message:data.message
+      })
+      setMessage("")
     } catch (err) {
       console.log(err)
     }

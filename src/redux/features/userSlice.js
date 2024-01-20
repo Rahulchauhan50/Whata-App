@@ -8,10 +8,12 @@ const initialState = {
     status:"",
     about:"Hi there! i am using whatsApp",
     NewUser:"",
-    id:undefined
+    id:undefined,
   },
   ConstactPage:false,
-  CurrentChatUser:undefined
+  CurrentChatUser:undefined,
+  Messages:undefined,
+  socket:undefined
 };
 
 const UserSlice = createSlice({
@@ -40,22 +42,30 @@ const UserSlice = createSlice({
       if(action.payload.id){
         state.UserInfo.id = action.payload.id;
       }
-      // console.log(action.payload);
-      // state.UserInfo = action.payload; 
-      // console.log(state.UserInfo);
-      // console.log(action.payload)
     },
     setConstactPage:(state, action) => {
       state.ConstactPage = !state.ConstactPage;
     },
     setCurrentChatUser:(state, action)=>{
       state.CurrentChatUser = action.payload.data;
+    },
+    setMessages:(state, action) => {
+      state.Messages = action.payload.data.message;
+    },
+    setSocket:(state, action) => {
+      console.log(action.payload)
+      state.socket = action.payload;
+    },
+    setAddMessages:(state, action) => {
+      console.log(state.Messages)
+      state.Messages = [...state.Messages, action.payload];
+      console.log(state.Messages)
     }
   },
 });
 
 
 
-export const {setUserInfo, setConstactPage, setCurrentChatUser} = UserSlice.actions;
+export const {setUserInfo, setConstactPage, setCurrentChatUser, setMessages, setSocket, setAddMessages} = UserSlice.actions;
 
 export default UserSlice.reducer;
