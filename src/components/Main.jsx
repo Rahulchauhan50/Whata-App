@@ -35,7 +35,6 @@ function Main() {
   useEffect(()=>{
     // if(socket.current){
       socket?.current?.on("msg-recieve",(data)=>{
-        alert(data)
         dispatch(setAddMessages(data))
       })
     //   setsocketEvent(true);
