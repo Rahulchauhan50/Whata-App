@@ -3,6 +3,11 @@ import React from "react";
 import { useSelector } from "react-redux";
 import MessageStatus from "../common/MessageStatus";
 import ImageMessage from "./ImageMessage";
+import dynamic from "next/dynamic";
+const VoiceMessage = dynamic(()=>import("./VoiceMessage"),{
+  ssr:false
+}) 
+
 
 function ChatContainer() {
   const { Messages } = useSelector((state) => state.user)
@@ -35,9 +40,8 @@ function ChatContainer() {
                   </div> 
                 )
               }
-              {
-                msg.type === "image" && <ImageMessage message={msg} />
-              }
+              {msg.type === "image" && <ImageMessage message={msg} />}
+              {msg.type === "audio" && <VoiceMessage message={msg} />}
             </div>
           })
         }

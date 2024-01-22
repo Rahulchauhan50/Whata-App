@@ -4,7 +4,7 @@
 
 .custom-scrollbar{
     height: 8px !important;
-    /* width: 8px; */
+    width: 0px;
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb{

@@ -1,20 +1,19 @@
+import { ADD_AUDIO_MESSAGE_ROUTE } from "@/utils/ApiRoutes";
 import React, { useEffect, useRef, useState } from "react";
-import {
-  FaMicrophone,
-  FaPause,
-  FaPauseCircle,
-  FaPlay,
-  FaStop,
-  FaTrash,
-} from "react-icons/fa";
+import axios from "axios";
+import {FaMicrophone,FaPauseCircle,FaPlay,FaStop,FaTrash} from "react-icons/fa";
 import { MdSend } from "react-icons/md";
-import { useSelector } from "react-redux";
 import WaveSurfer from "wavesurfer.js";
+import { useDispatch, useSelector } from "react-redux";
+import { setAddMessages } from "@/redux/features/userSlice";
+
 
 function CaptureAudio({ hide }) {
+  const dispatch = useDispatch();
   const { UserInfo } = useSelector((state) => state.user);
   const { CurrentChatUser } = useSelector((state) => state.user);
   const { socket } = useSelector((state) => state.user);
+  
 
   const [IsRecording, setIsRecording] = useState(false);
   const [RecordedAudio, setRecordedAudio] = useState(null);
@@ -51,13 +50,14 @@ function CaptureAudio({ hide }) {
     setTotalDuration(0)
     setCurrentPlayBackTime(0)
     setIsRecording(true)
+    setrenderAudio(null)
     navigator.mediaDevices.getUserMedia({audio:true}).then((stream)=>{
       const mediaRecorder = new MediaRecorder(stream)
       MediaRecorderRef.current = mediaRecorder;
       AudioRef.current.srcObject = stream;
 
       const chunks = [];
-      mediaRecorder.outdataavailabale = (e)=> chunks.push(e.data)
+      mediaRecorder.ondataavailable = (e) => chunks.push(e.data);
       mediaRecorder.onstop = () => {
           const blob = new Blob(chunks, { type:"audio/ogg; codecs=opus"})
           const audioURL = URL.createObjectURL(blob)
@@ -84,13 +84,23 @@ function CaptureAudio({ hide }) {
       });
 
       MediaRecorderRef.current.addEventListener("stop",()=>{
-        const audioBlob = new Blob(audioChunks, { type:"audio/mp3"})
-        const audioFile = new File([audioBlob], "recording.mp3")
-        setRecordedAudio(audioFile)
+        const audioBlob = new Blob(audioChunks, { type: "audio/mp3" });
+        const audioFile = new File([audioBlob], "recording.mp3");
+        
+
+        const audio = new Audio(URL.createObjectURL(audioFile));
+        setRecordedAudio(audio);
+        setrenderAudio(audioFile);
       })
+
+        const mediaStream = AudioRef.current.srcObject;
+      const tracks = mediaStream.getTracks();
+      tracks.forEach(track => track.stop());
+      AudioRef.current.srcObject = null;
+
+      console.log(AudioRef)
     }
   };
-
   const handlePlayRecording = () => {
     if(RecordedAudio){
       waveForm.stop()
@@ -106,7 +116,48 @@ function CaptureAudio({ hide }) {
   };
 
  
-  const sendRecording = async () => {};
+  const sendRecording = async () => {
+    if(IsRecording){
+      handleStopRecording()
+    }
+    try {
+      const formData = new FormData();
+      formData.append("audio", renderAudio);
+
+      const resopnse = await axios.post(ADD_AUDIO_MESSAGE_ROUTE, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+        params: {
+          from: UserInfo.id,
+          to: CurrentChatUser.id,
+        },
+      });
+      if (resopnse.status === 201) {
+        console.log(resopnse);
+        dispatch(
+          setAddMessages({
+            senderId: UserInfo?.id,
+            message: resopnse.data.message.message,
+            recieverId: CurrentChatUser?.id,
+            type: "audio",
+            createAt: Date.now(),
+            messageStatus: "sent",
+          })
+        );
+        socket.current.emit("send-msg", {
+          senderId: UserInfo?.id,
+          message: resopnse.data.message.message,
+          recieverId: CurrentChatUser?.id,
+          type: "audio",
+          createAt: Date.now(),
+          messageStatus: "sent",
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
  
 
@@ -185,7 +236,7 @@ function CaptureAudio({ hide }) {
             )}
           </div>
         )}
-        <div className="w-60" ref={WaveFormRef} hidden={IsRecording}> </div>
+        <div className="w-60" ref={WaveFormRef} hidden={IsRecording}/>
           {RecordedAudio && IsPlaying && (
             <span>{formatTime(CurrentPlayBackTime)}</span>
           )}

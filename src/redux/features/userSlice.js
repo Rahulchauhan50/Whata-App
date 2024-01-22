@@ -13,7 +13,10 @@ const initialState = {
   ConstactPage:false,
   CurrentChatUser:undefined,
   Messages:undefined,
-  socket:undefined
+  socket:undefined,
+  MessageSearch:false,
+  UserContacts:[],
+  OnlineUser:[]
 };
 
 const UserSlice = createSlice({
@@ -53,19 +56,27 @@ const UserSlice = createSlice({
       state.Messages = action.payload.data.message;
     },
     setSocket:(state, action) => {
-      console.log(action.payload)
       state.socket = action.payload;
     },
     setAddMessages:(state, action) => {
-      console.log(state.Messages)
       state.Messages = [...state.Messages, action.payload];
-      console.log(state.Messages)
-    }
+    },
+    setMessageSearch:(state, action) => {
+      state.MessageSearch = !state.MessageSearch
+    },
+    setUserContacts:(state, action) => {
+      state.UserContacts = action.payload.userContacts
+    },
+    setOnlineUser:(state, action) => {
+      state.OnlineUser = action.payload.onlineUser
+    },
+
+
   },
 });
 
 
 
-export const {setUserInfo, setConstactPage, setCurrentChatUser, setMessages, setSocket, setAddMessages} = UserSlice.actions;
+export const {setUserInfo, setConstactPage, setCurrentChatUser, setMessages, setSocket, setAddMessages, setMessageSearch, setUserContacts, setOnlineUser} = UserSlice.actions;
 
 export default UserSlice.reducer;
