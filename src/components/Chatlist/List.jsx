@@ -5,6 +5,7 @@ import { GET_INITIAL_CONTACT_ROUTE } from "@/utils/ApiRoutes";
 import axios from "axios";
 import React, { useEffect } from "react";
 import ChatList from "./ChatList";
+import ChatLIstItem from "./ChatLIstItem";
 
 function List() {
   const { UserInfo } = useSelector((state) => state.user)
@@ -15,11 +16,9 @@ function List() {
   useEffect(()=>{
     const getContacts = async () =>{
       try {
-        const {data:{users, onlineUsers}} = await axios.get(`${GET_INITIAL_CONTACT_ROUTE}/${UserInfo?.id}`)
-        console.log("rajhhj")
+        const {data:{users,onlineUsers}} = await axios.get(`${GET_INITIAL_CONTACT_ROUTE}/${UserInfo?.id}`)
         dispatch(setOnlineUser({onlineUsers}));
         dispatch(setUserContacts({userContacts:users}));
-        console.log(users)
       } catch (error) {
         console.log(error)
       }
@@ -29,10 +28,10 @@ function List() {
     }
   },[UserInfo?.id])
 
-  return <div className="bg-search-input-container-background flex-auto overflow-auto max-h-full custom-scrollbar" >
+  return <div className="bg-search-input-container-background flex-auto overflow-auto max-h-full " >
 {
   UserContacts?.map((contacts)=>{
-    return <ChatList data={contacts} key={contacts?.id} />
+    return <ChatLIstItem data={contacts.id===contacts.lastMessage.senderId?contacts.lastMessage.sender:contacts.lastMessage.reciever} key={contacts?.id} />
 
   })
 }

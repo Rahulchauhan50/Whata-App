@@ -19,7 +19,6 @@ function ChatContainer() {
     <div className="bg-chat-background-ghfghfghfghfghfghfghfghfghfghfghfgh bg-fixed h-full w-full opacity- relative left-0 top-0 z-0">
       <div className="mx-10 my-6 relative bottom-0 z-40 left-0">
       <div className="flex w-full">
-        {console.log(Messages)}
       <div className="flex flex-col justify-end w-full gap-1 overflow-auto">
         {
           Messages?.map((msg, index)=>{
@@ -33,7 +32,6 @@ function ChatContainer() {
                         {calculateTime(msg.createAt)}
                       </span>
                       <span>
-                        {console.log(msg)}
                         {msg.senderId === UserInfo.id && <MessageStatus messageStatus={msg.messageStatus} />}
                       </span>
                     </div>

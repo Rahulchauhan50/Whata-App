@@ -33,9 +33,11 @@ function Main() {
 
   useEffect(() => {
     // if(socket.current){
-    socket?.current?.on("msg-recieve", (data) => {
-      dispatch(setAddMessages(data));
-    });
+      
+
+        socket?.current?.on("msg-recieve", (data) => {
+          dispatch(setAddMessages(data));
+        });
     //   setsocketEvent(true);
     // }
   }, [socket?.current]);
