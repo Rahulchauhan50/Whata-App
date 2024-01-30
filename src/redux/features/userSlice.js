@@ -16,7 +16,13 @@ const initialState = {
   socket:undefined,
   MessageSearch:false,
   UserContacts:[],
-  OnlineUser:[]
+  OnlineUser:[],
+  filteredContacts:[],
+  videoCall:undefined,
+  voiceCall:undefined,
+  incomingVideoCall:undefined,
+  incomingVoiceCall:undefined
+
 };
 
 const UserSlice = createSlice({
@@ -70,13 +76,44 @@ const UserSlice = createSlice({
     setOnlineUser:(state, action) => {
       state.OnlineUser = action.payload.onlineUser
     },
+    setfilteredContacts: (state, action) => {
+      const UserContacts = JSON.parse(JSON.stringify(state.UserContacts));
+    
+      const filteredContacts = UserContacts.filter((contact) => {
+        console.log(contact);
+        const contacts = contact.id === contact.lastMessage.senderId
+          ? contact.lastMessage.sender
+          : contact.lastMessage.reciever;
 
-
+        return contacts.name.toLowerCase().includes(action.payload.contactSearch.toLowerCase());
+      });
+    
+      state.filteredContacts = filteredContacts;
+    },
+    setVideoCall:( state ,action) => {
+      state.videoCall = action.payload.videoCall
+    },
+    setVoiceCall:( state ,action) => {
+      state.voiceCall = action.payload.voiceCall
+    },
+    setIncomingVideoCall:( state ,action) => {
+      state.incomingVideoCall = action.payload.incomingVideoCall
+    },
+    setIncomingVoiceCall:( state ,action) => {
+      console.log(action.payload)
+      state.incomingVoiceCall = action.payload.incomingVoiceCall
+    },
+    EndCall:( state ,action) => {
+      state.videoCall=undefined
+      state.voiceCall=undefined
+      state.incomingVideoCall=undefined
+      state.incomingVoiceCall=undefined
+    }
   },
 });
 
 
 
-export const {setUserInfo, setConstactPage, setCurrentChatUser, setMessages, setSocket, setAddMessages, setMessageSearch, setUserContacts, setOnlineUser} = UserSlice.actions;
+export const {setUserInfo, setConstactPage, setCurrentChatUser, setMessages, setSocket, setAddMessages, setMessageSearch, setUserContacts, setOnlineUser, setfilteredContacts, setVideoCall, setVoiceCall, setIncomingVideoCall, setIncomingVoiceCall, EndCall} = UserSlice.actions;
 
 export default UserSlice.reducer;

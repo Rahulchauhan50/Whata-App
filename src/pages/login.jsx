@@ -38,16 +38,15 @@ function login() {
   } 
 
   return <div className="flex justify-center items-center bg-panel-header-background h-screen w-screen flex-col gap-6">
-    <div className="flex items-center justify-center gap-2 text-white">
+    <div className="flex xl:flex-row flex-col items-center justify-center gap-2 text-white">
     <Image src='/whatsapp.gif' alt="whatsapp" height={300} width={300} />
-      <span className="text-7xl">Whatsapp</span>
+      <span className="xl:text-7xl text-4xl">Whatsapp</span>
     </div>
     <button className="flex items-center justify-center gap-7 bg-search-input-container-background p-5 rounded-lg" onClick={handlelogin}>
       <FcGoogle className="text-4xl"/>
-      <span className="text-white text-2xl">Login with Google</span>
+      <span className="text-white xl:text-2xl text-xl">Login with Google</span>
     </button>
   </div>;
 }
 
 export default login;
- 

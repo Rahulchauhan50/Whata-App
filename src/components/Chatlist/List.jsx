@@ -6,11 +6,12 @@ import axios from "axios";
 import React, { useEffect } from "react";
 import ChatList from "./ChatList";
 import ChatLIstItem from "./ChatLIstItem";
+import { data } from "autoprefixer";
 
 function List() {
   const { UserInfo } = useSelector((state) => state.user)
+  const { filteredContacts } = useSelector((state) => state.user)
   const { UserContacts } = useSelector((state) => state.user)
-
   const dispatch = useDispatch();
 
   useEffect(()=>{
@@ -29,12 +30,15 @@ function List() {
   },[UserInfo?.id])
 
   return <div className="bg-search-input-container-background flex-auto overflow-auto max-h-full " >
-{
-  UserContacts?.map((contacts)=>{
-    return <ChatLIstItem data={contacts.id===contacts.lastMessage.senderId?contacts.lastMessage.sender:contacts.lastMessage.reciever} key={contacts?.id} />
-
-  })
-}
+    {
+      filteredContacts && filteredContacts.length>0?filteredContacts?.map((contacts)=>{
+        return <ChatLIstItem data={contacts.id===contacts.lastMessage.senderId?contacts.lastMessage.sender:contacts.lastMessage.reciever} key={contacts?.id} unreadMessageCount={contacts?.unreadMessageCount} lastMessage={contacts?.lastMessage}/>
+    
+      }):UserContacts?.map((contacts)=>{
+        return <ChatLIstItem data={contacts.id===contacts.lastMessage.senderId?contacts.lastMessage.sender:contacts.lastMessage.reciever} key={contacts?.id} unreadMessageCount={contacts?.unreadMessageCount} lastMessage={contacts?.lastMessage}/>
+    
+      })
+    }
   </div>
 }
 

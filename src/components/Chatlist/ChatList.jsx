@@ -19,7 +19,7 @@ function ChatList() {
   },[ConstactPage])
 
 
-  return <div className="bg-panel-header-background flex flex-col max-h-screen z-20 ">
+  return <div className="bg-panel-header-background flex flex-col max-h-screen z-20">
     {!ConstactPage ?(<><ChatListHeader/><SearchBar/><List/></>):<ContactsList/>}
     
      

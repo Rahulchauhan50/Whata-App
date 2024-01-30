@@ -10,6 +10,8 @@ import ChatLIstItem from "./ChatLIstItem";
 
 function ContactsList() {
   const [allContacts, setallContacts] = useState([]);
+  const [serchTerm, setserchTerm] = useState('')
+  const [searchContacts, setsearchContacts] = useState([])
   const dispatch = useDispatch();
 
   const getContacts = async () => {
@@ -18,6 +20,7 @@ function ContactsList() {
         data: { users },
       } = await axios.get(GET_ALL_CONTACTS);
       setallContacts(users);
+      setsearchContacts(users);
     } catch (error) {
       console.log(error);
     }
@@ -25,6 +28,18 @@ function ContactsList() {
   useEffect(() => {
     getContacts();
   }, []);
+
+  useEffect(()=>{
+    if(serchTerm.length){
+      const filterdata = {}
+      Object.keys(allContacts).forEach((key=>{
+        filterdata[key] = allContacts[key].filter((obj)=>obj.name.toLowerCase().includes(serchTerm.toLowerCase()));
+      }))
+      setsearchContacts(filterdata)
+    }else{
+      setsearchContacts(allContacts)
+    }
+  },[serchTerm])
   return (
     <div className="h-full flex flex-col">
       <div className="h-24 flex items-end px-3 py-4">
@@ -49,11 +64,23 @@ function ContactsList() {
                 className="bg-transparent text-sm focus:outline-none text-white w-full"
                 placeholder="search Contacts"
                 type="text"
+                value={serchTerm}
+                onChange={e=>setserchTerm(e.target.value)}
               />
             </div>
           </div>
         </div>
-        {Object.entries(allContacts).map(([initialLetter, userList]) => {
+        {serchTerm.length>0? Object.entries(searchContacts).map(([initialLetter, userList]) => {
+          return (
+            <div key={Date.now() + initialLetter}>
+            {userList.length>0 && <div className="text-teal-light pl-10 py-5">{initialLetter}</div>}
+              
+              {userList.map((contacts) => {
+                return <ChatLIstItem className="" data={contacts} isContactpage={true} key={contacts.id} />;
+              })}
+            </div>
+          );
+        }):Object.entries(allContacts).map(([initialLetter, userList]) => {
           return (
             <div key={Date.now() + initialLetter}>
               <div className="text-teal-light pl-10 py-5">{initialLetter}</div>

@@ -1,13 +1,13 @@
 import React from "react";
 import Avatar from "../common/Avatar";
-import { setCurrentChatUser } from "@/redux/features/userSlice";
+import { setCurrentChatUser,setConstactPage } from "@/redux/features/userSlice";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import { calculateTime } from "@/utils/CalculateTime";
 import MessageStatus from "../common/MessageStatus";
 import { FaCamera, FaMicrophone } from "react-icons/fa";
 
-function ChatLIstItem({ data, isContactpage = false }) {
+function ChatLIstItem({ data, isContactpage = false,lastMessage=false, unreadMessageCount=0 }) {
   const dispatch = useDispatch();
   const { CurrentChatUser } = useSelector((state) => state.user)
   const { UserInfo } = useSelector((state) => state.user)
@@ -15,6 +15,9 @@ function ChatLIstItem({ data, isContactpage = false }) {
   const HandleContactClick = () => {
     if (data?.id !== CurrentChatUser?.id) {
       dispatch(setCurrentChatUser({ data }));
+      if(isContactpage){
+        dispatch(setConstactPage())
+      }
       console.log(data)
     }
   }
@@ -31,8 +34,8 @@ function ChatLIstItem({ data, isContactpage = false }) {
         {
           !isContactpage && (
             <div>
-              <span className={`${true ? "text-secondary" : "text-icon-green"} text-sm`} >
-                {calculateTime(data?.createAt)}
+              <span className={`${unreadMessageCount>0 ? "text-icon-green" : "text-secondary"} text-sm`} >
+                {calculateTime(lastMessage?.createAt)}
               </span>
             </div>
           )
@@ -45,19 +48,22 @@ function ChatLIstItem({ data, isContactpage = false }) {
             {isContactpage ? data?.about || "\u00A0":
             <div className="flex items-center gap-1 max-w-[200px] sm:max-w-[250px] md:max-w-[300px] lg:max-w-[200px] xl:max-w-[300px]">
               {
-                data.senderId === UserInfo?.id? <MessageStatus messageStatus={data.messageStatus}/>:""
+                lastMessage?.senderId === UserInfo?.id? <MessageStatus messageStatus={lastMessage?.messageStatus}/>:""
               }
               {
-                data.type === "text" ? <span className="truncate">{data.message}</span>:""
+                lastMessage?.type === "text" ? <span className="truncate">{lastMessage?.message}</span>:""
               }
               {
-                data.type === "audio" ? <span className="flex gap-1 items-center"><FaCamera/>Image</span>:""
+                lastMessage?.type === "image" ? <span className="flex gap-1 items-center"><FaCamera/>Image</span>:""
               }
               {
-                data.type === "audio" ? <span className="flex gap-1 items-center"><FaMicrophone className="text-panel-header-icon" />Audio</span>:""
+                lastMessage?.type === "audio" ? <span className="flex gap-1 items-center"><FaMicrophone className="text-panel-header-icon" />Audio</span>:""
               }
               </div>}
             </span>
+            {
+              unreadMessageCount>0 ?<span className="bg-icon-green px-[5px] rounded-full text-sm " >{unreadMessageCount}</span>:""
+            }
         </div>
 
       </div>
