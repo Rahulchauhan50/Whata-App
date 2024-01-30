@@ -136,7 +136,7 @@ function MessageBar({ socket }) {
   }, [grabPhoto]);
 
   return (
-    <div className="bg-panel-header-background h-20 px-4 flex items-center gap-6 relative">
+    <div className="bg-panel-header-background h-20 px-4 flex items-center gap-6 md:w-auto w-full md:relative fixed bottom-0 left-0 ">
       {!showAudioRecorder && (
         <>
           <div className="flex gap-6">
@@ -149,9 +149,9 @@ function MessageBar({ socket }) {
             {showEmojiPicker && (
               <div
                 ref={emojiPickerRef}
-                className="absolute bottom-24 left-16 z-40"
+                className="absolute md:bottom-10 bottom-20 md:left-16 left-2  z-40"
               >
-                <EmojiPicker onEmojiClick={HandleEmojiClick} theme="dark" />
+                <EmojiPicker width={window.innerWidth< 768 ?window.innerWidth-20:""} onEmojiClick={HandleEmojiClick} theme="dark" />
               </div>
             )}
             <ImAttachment

@@ -9,7 +9,7 @@ function SearchMessages() {
   const dispatch = useDispatch();
   const [searchTrem, setsearchTrem] = useState('');
   const [searchedMessaged, setsearchedMessaged] = useState([])
-  const { CurrentChatUser } = useSelector((state) => state.user)
+  const { CurrentChatUser,MessageSearch } = useSelector((state) => state.user)
   const { Messages } = useSelector((state) => state.user)
 
   useEffect(()=>{
@@ -20,7 +20,7 @@ function SearchMessages() {
     }
   },[searchTrem])
   return (
-    <div className="border-conversation-border border-1 w-full bg-conversation-panel-background flex flex-col z-10 max-h-screen">
+    <div className={`border-conversation-border border-1 md:w-auto w-screen bg-conversation-panel-background flex flex-col z-10 max-h-screen absolute top-0 h-full transition-all duration-500  ${MessageSearch ? 'left-0' : '-left-[100vw]'}`} >
       <div className="h-16 px-4 py-5 flex gap-10 items-center bg-panel-header-background text-primary-strong">
         <IoClose
           className="cursor-pointer text-icon-lighter text-2xl"

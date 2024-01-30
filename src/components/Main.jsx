@@ -43,7 +43,6 @@ function Main() {
 
   useEffect(() => {
     if(socket.current){
-      alert("socket")
     socket?.current?.on("msg-recieve", (data) => {
       dispatch(setAddMessages(data));
     });
@@ -54,7 +53,6 @@ function Main() {
     });
 
     socket?.current?.on("incoming-video-call", ({from,roomId,callType}) => {
-      alert("incoming video call")
       dispatch(setIncomingVideoCall({incomingVideoCall:{...from,roomId,callType}}));
     });
 
@@ -101,16 +99,17 @@ function Main() {
         </div>
       )}
       {!videoCall && !voiceCall && (
-        <div className="grid grid-cols-main h-screen w-screen max-h-screen max-w-full overflow-hidden">
+        <div className="grid md:grid-cols-main h-screen w-screen max-h-screen max-w-full ">
           <ChatList />
           {CurrentChatUser ? (
             <div
-              className={`${
-                MessageSearch ? "grid grid-cols-2" : "grid-cols-2"
-              } h-screen`}
+            className={`${
+              MessageSearch ? "md:grid md:grid-cols-2 md:w-auto w-screen" : "grid-cols-2"
+            } h-screen`}
+              // className={`grid-cols-2 h-screen `}
             >
               <Chat socket={socket} />
-              {MessageSearch && <SearchMessages />}
+              { <SearchMessages />}
             </div>
           ) : (
             <Empty />

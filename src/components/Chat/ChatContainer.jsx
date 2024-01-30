@@ -15,11 +15,11 @@ function ChatContainer() {
   const { UserInfo } = useSelector((state) => state.user)
 
 
-  return <div className="h-[80vh] w-full relative flex-grow overflow-auto custom-scrollbar-width-0">
-    <div className="bg-chat-backgroun bg-fixed h-full w-full opacity- relative left-0 top-0 z-0">
+  return <div className="h-auto w-full relative flex-grow overflow-auto ">
+    <div className="bg-chat-backgroun bg-fixed w-full opacity- relative left-0 top-0 z-0">
       <div className="lg:mx-10 mx-4 my-6 relative bottom-0 z-40 left-0">
       <div className="flex w-full">
-      <div className="flex flex-col justify-end w-full gap-1 overflow-auto">
+      <div className="flex flex-col justify-end w-full gap-1 overflow-auto md:mb-2 mb-6">
         {
           Messages?.map((msg, index)=>{
             return <div key={index} className={`flex max-w-full ${msg.senderId===CurrentChatUser?.id?"justify-start":"justify-end"}`}>

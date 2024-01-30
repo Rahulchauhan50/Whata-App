@@ -1,6 +1,6 @@
 import React from "react";
 import Avatar from "../common/Avatar";
-import { setCurrentChatUser,setConstactPage } from "@/redux/features/userSlice";
+import { setCurrentChatUser,setConstactPage, setMessages } from "@/redux/features/userSlice";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import { calculateTime } from "@/utils/CalculateTime";
@@ -14,6 +14,7 @@ function ChatLIstItem({ data, isContactpage = false,lastMessage=false, unreadMes
 
   const HandleContactClick = () => {
     if (data?.id !== CurrentChatUser?.id) {
+      dispatch(setMessages({data:{message:[]}}))
       dispatch(setCurrentChatUser({ data }));
       if(isContactpage){
         dispatch(setConstactPage())

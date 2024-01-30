@@ -10,7 +10,7 @@ import { useEffect } from 'react';
 import ContactsList from "./ContactsList";
 
 function ChatList() {
-  const { ConstactPage } = useSelector((state) => state.user);
+  const { ConstactPage, CurrentChatUser } = useSelector((state) => state.user);
 
 
 
@@ -19,7 +19,7 @@ function ChatList() {
   },[ConstactPage])
 
 
-  return <div className="bg-panel-header-background flex flex-col max-h-screen z-20">
+  return <div className={`${CurrentChatUser?"hidden md:flex":"flex" } bg-panel-header-background flex-col max-h-screen z-20`}>
     {!ConstactPage ?(<><ChatListHeader/><SearchBar/><List/></>):<ContactsList/>}
     
      

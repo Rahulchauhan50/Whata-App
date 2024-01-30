@@ -8,7 +8,6 @@ function VideoCall({socket}) {
 
   useEffect(()=>{
     if(videoCall.type==="out-going"){
-      alert("video")
       socket.current.emit("outgoing-video-call",{
         to:videoCall.id,
         from:UserInfo,

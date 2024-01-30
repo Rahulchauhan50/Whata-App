@@ -22,7 +22,7 @@ function ChatHeader() {
     dispatch(setVideoCall({videoCall:{...CurrentChatUser, type:"out-going", callType:"video", roomId:Date.now()}}))
   }
   
-  return <div className="h-16 px-4 py-3 flex justify-between items-center bg-panel-header-background z-10 sticky" >
+  return <div className="h-16 px-4 py-3 flex justify-between items-center bg-panel-header-background z-10 " >
     <div className="flex items-center justify-center gap-2" >
     <BsArrowLeftShort className="lg:hidden" color="white" size={30} onClick={()=>{dispatch(setCurrentChatUser({data:undefined}))}} />
       <Avatar type='sm' image={CurrentChatUser?.profileImage} />

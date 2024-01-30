@@ -60,7 +60,6 @@ function Container({socket,data}) {
   },[acceptCall])
 
   useEffect(()=>{
-    alert("run")
     const startCall = async () => {
       import("zego-express-engine-webrtc").then(async({ZegoExpressEngine})=>{
         const zg = new ZegoExpressEngine(parseInt(process.env.NEXT_PUBLIC_ZEGO_APP_ID),process.env.NEXT_PUBLIC_ZEGO_SERVER_ID)
@@ -92,7 +91,6 @@ function Container({socket,data}) {
         })
         const result  = await zg.loginRoom(data.roomId.toString(),token,{userID:UserInfo.id, userName:UserInfo.name},{userUpdate:true})
         console.log(result)
-        alert(result)
         const localStream = await zg.createStream({
           camera:{
             audio:true,
