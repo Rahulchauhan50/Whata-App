@@ -151,7 +151,7 @@ function MessageBar({ socket }) {
                 ref={emojiPickerRef}
                 className="absolute md:bottom-10 bottom-20 md:left-16 left-2  z-40"
               >
-                <EmojiPicker width={window.innerWidth< 768 ?window.innerWidth-20:""} onEmojiClick={HandleEmojiClick} theme="dark" />
+                <EmojiPicker width={window.innerWidth< 768 ?window.innerWidth-15:400} onEmojiClick={HandleEmojiClick} theme="dark" />
               </div>
             )}
             <ImAttachment

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Avatar from "../common/Avatar";
 import {MdCall} from 'react-icons/md'
 import {IoVideocam} from 'react-icons/io5'
@@ -9,11 +9,27 @@ import { useSelector } from "react-redux";
 import { setVoiceCall, setVideoCall, setCurrentChatUser } from '@/redux/features/userSlice';
 import { setMessageSearch } from "@/redux/features/userSlice";
 import { BsArrowLeftShort } from "react-icons/bs"
+import ContextMenu from "../common/ContextMenu";
 
 function ChatHeader() {
-  const { UserInfo} = useSelector((state) => state.user)
-  const { CurrentChatUser } = useSelector((state) => state.user)
+  const { CurrentChatUser, OnlineUser } = useSelector((state) => state.user)
   const dispatch = useDispatch();
+
+  const [contextMenuCordinates, setcontextMenuCordinates] = useState({x:0,y:0})
+  const [IsContextMenuVisible, setIsContextMenuVisible] = useState(false)
+
+  const contextMenuOptions = [
+    {name:"Exist",callback:() => {
+      dispatch(setCurrentChatUser({data:undefined}))
+    }}
+  ]
+
+  const showContextMenu = (e) => {
+    e.preventDefault();
+    setIsContextMenuVisible(true)
+    setcontextMenuCordinates({x:e.pageX,y:e.pageY})
+
+  }
 
   const HandleVoiceCall = () => {
     dispatch(setVoiceCall({voiceCall:{...CurrentChatUser, type:"out-going", callType:"voice", roomId:Date.now()}}))
@@ -28,14 +44,22 @@ function ChatHeader() {
       <Avatar type='sm' image={CurrentChatUser?.profileImage} />
       <div className="flex flex-col">
         <span className="text-primary-strong" >{CurrentChatUser?.name}</span>
-        <span className="text-secondary text-sm" >Offline/online</span>
+        <span className="text-secondary text-sm" >
+        {
+    OnlineUser.includes(CurrentChatUser.id) ? "online" : "offline"
+  }
+        </span>
       </div>
     </div>
     <div className="flex gap-6" >
         <MdCall onClick={HandleVoiceCall} className="text-panel-header-icon cursor-pointer text-xl"/>
         <IoVideocam onClick={HandleVideoCall} className="text-panel-header-icon cursor-pointer text-xl"/>
         <BiSearchAlt2 className="text-panel-header-icon cursor-pointer text-xl" onClick={()=>dispatch(setMessageSearch())}/>
-        <BsThreeDotsVertical className="text-panel-header-icon cursor-pointer text-xl"/>
+        <BsThreeDotsVertical onClick={(e)=>showContextMenu(e)} className="text-panel-header-icon cursor-pointer text-xl context-openers"/>
+       
+        {
+          IsContextMenuVisible && (<ContextMenu options={contextMenuOptions} cordinate={contextMenuCordinates} contextMenu={IsContextMenuVisible} setContextMenu={setIsContextMenuVisible} />)
+        }
     </div>
   </div>;
 }

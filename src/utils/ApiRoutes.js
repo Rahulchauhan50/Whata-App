@@ -1,4 +1,4 @@
-export const HOST = 'https://whatsapp-9jwy.onrender.com'
+export const HOST = 'http://localhost:5000'
 
 const AUTH_ROUTE = `${HOST}/api/auth`
 const MESSAGES_ROUTE = `${HOST}/api/messages`

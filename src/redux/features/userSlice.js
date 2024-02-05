@@ -30,26 +30,37 @@ const UserSlice = createSlice({
   initialState,
   reducers: {
     setUserInfo: (state, action) => {
-      if(action.payload.name){
+      if(action.payload?.name){
         state.UserInfo.name = action.payload.name;
       }
-      if(action.payload.email){
+      if(action.payload?.email){
         state.UserInfo.email = action.payload.email;
       }
-      if(action.payload.profileImage){
+      if(action.payload?.profileImage){
         state.UserInfo.profileImage = action.payload.profileImage;
       }
-      if(action.payload.status){
+      if(action.payload?.status){
         state.UserInfo.status = action.payload.status;
       }
-      if(action.payload.about){
+      if(action.payload?.about){
         state.UserInfo.about = action.payload.about;
       }
-      if(action.payload.NewUser){
+      if(action.payload?.NewUser){
         state.UserInfo.NewUser = action.payload.NewUser;
       }
-      if(action.payload.id){
+      if(action.payload?.id){
         state.UserInfo.id = action.payload.id;
+      }
+      else{
+        state.UserInfo = {
+          name:"",
+          email:"",
+          profileImage:"/default_avatar.png",
+          status:"",
+          about:"Hi there! i am using whatsApp",
+          NewUser:"",
+          id:undefined,
+        }
       }
     },
     setConstactPage:(state, action) => {
@@ -59,7 +70,7 @@ const UserSlice = createSlice({
       state.CurrentChatUser = action.payload.data;
     },
     setMessages:(state, action) => {
-      state.Messages = action.payload.data.message;
+      state.Messages = action.payload.data.messages;
     },
     setSocket:(state, action) => {
       state.socket = action.payload;
@@ -74,13 +85,12 @@ const UserSlice = createSlice({
       state.UserContacts = action.payload.userContacts
     },
     setOnlineUser:(state, action) => {
-      state.OnlineUser = action.payload.onlineUser
+      state.OnlineUser = action.payload.onlineUsers
     },
     setfilteredContacts: (state, action) => {
       const UserContacts = JSON.parse(JSON.stringify(state.UserContacts));
     
       const filteredContacts = UserContacts.filter((contact) => {
-        console.log(contact);
         const contacts = contact.id === contact.lastMessage.senderId
           ? contact.lastMessage.sender
           : contact.lastMessage.reciever;
@@ -100,7 +110,6 @@ const UserSlice = createSlice({
       state.incomingVideoCall = action.payload.incomingVideoCall
     },
     setIncomingVoiceCall:( state ,action) => {
-      console.log(action.payload)
       state.incomingVoiceCall = action.payload.incomingVoiceCall
     },
     EndCall:( state ,action) => {

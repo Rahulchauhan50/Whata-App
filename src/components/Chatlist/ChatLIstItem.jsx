@@ -19,7 +19,6 @@ function ChatLIstItem({ data, isContactpage = false,lastMessage=false, unreadMes
       if(isContactpage){
         dispatch(setConstactPage())
       }
-      console.log(data)
     }
   }
 
@@ -36,7 +35,7 @@ function ChatLIstItem({ data, isContactpage = false,lastMessage=false, unreadMes
           !isContactpage && (
             <div>
               <span className={`${unreadMessageCount>0 ? "text-icon-green" : "text-secondary"} text-sm`} >
-                {calculateTime(lastMessage?.createAt)}
+                {calculateTime(lastMessage?.createdAt)}
               </span>
             </div>
           )

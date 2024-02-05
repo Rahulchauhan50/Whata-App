@@ -9,7 +9,7 @@ import { setConstactPage } from '@/redux/features/userSlice';
 import { useEffect } from 'react';
 import ContactsList from "./ContactsList";
 
-function ChatList() {
+function ChatList({socket}) {
   const { ConstactPage, CurrentChatUser } = useSelector((state) => state.user);
 
 
@@ -20,7 +20,7 @@ function ChatList() {
 
 
   return <div className={`${CurrentChatUser?"hidden md:flex":"flex" } bg-panel-header-background flex-col max-h-screen z-20`}>
-    {!ConstactPage ?(<><ChatListHeader/><SearchBar/><List/></>):<ContactsList/>}
+    {!ConstactPage ?(<><ChatListHeader socket={socket} /><SearchBar/><List/></>):<ContactsList/>}
     
      
   </div>;

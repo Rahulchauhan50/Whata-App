@@ -5,7 +5,7 @@ function ContextMenu({ options , cordinate, contextMenu, setContextMenu}) {
 
   useEffect(()=>{
     const handleoutside = (event) => {
-      if(!event.target.className.includes("context-openers")){
+      if(!event?.target?.className?.includes("context-openers")){
         if(contextMenuRef.current && !contextMenuRef.current.contains(event.target)){
           setContextMenu(false)
         }

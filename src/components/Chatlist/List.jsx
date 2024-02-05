@@ -18,6 +18,7 @@ function List() {
     const getContacts = async () =>{
       try {
         const {data:{users,onlineUsers}} = await axios.get(`${GET_INITIAL_CONTACT_ROUTE}/${UserInfo?.id}`)
+        console.log(data)
         dispatch(setOnlineUser({onlineUsers}));
         dispatch(setUserContacts({userContacts:users}));
       } catch (error) {
@@ -35,7 +36,7 @@ function List() {
         return <ChatLIstItem data={contacts.id===contacts.lastMessage.senderId?contacts.lastMessage.sender:contacts.lastMessage.reciever} key={contacts?.id} unreadMessageCount={contacts?.unreadMessageCount} lastMessage={contacts?.lastMessage}/>
     
       }):UserContacts?.map((contacts)=>{
-        return <ChatLIstItem data={contacts.id===contacts.lastMessage.senderId?contacts.lastMessage.sender:contacts.lastMessage.reciever} key={contacts?.id} unreadMessageCount={contacts?.unreadMessageCount} lastMessage={contacts?.lastMessage}/>
+        return <ChatLIstItem data={contacts.id === contacts.lastMessage.senderId ? contacts.lastMessage.sender : contacts.lastMessage.reciever} key={contacts?.id} unreadMessageCount={contacts?.unreadMessageCount} lastMessage={contacts?.lastMessage} />
     
       })
     }

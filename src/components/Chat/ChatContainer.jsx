@@ -40,6 +40,7 @@ function ChatContainer() {
               }
               {msg.type === "image" && <ImageMessage message={msg} />}
               {msg.type === "audio" && <VoiceMessage message={msg} />}
+             
             </div>
           })
         }

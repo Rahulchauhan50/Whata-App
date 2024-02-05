@@ -5,7 +5,7 @@ import Chat from "./Chat/Chat";
 import { useSelector } from "react-redux";
 import axios from "axios";
 import { GET_MESSAGE_ROUTE, HOST } from "@/utils/ApiRoutes";
-import { setMessages } from "@/redux/features/userSlice";
+import { setMessages, setOnlineUser } from "@/redux/features/userSlice";
 import { useDispatch } from "react-redux";
 import { io } from "socket.io-client";
 import {EndCall, setSocket, setAddMessages, setIncomingVoiceCall, setIncomingVideoCall } from "@/redux/features/userSlice";
@@ -49,21 +49,20 @@ function Main() {
 
     socket?.current?.on("incoming-voice-call", ({from,roomId,callType}) => {
       dispatch(setIncomingVoiceCall({incomingVoiceCall:{...from,roomId,callType}}));
-      // console.log(incomingVoiceCall)
     });
 
     socket?.current?.on("incoming-video-call", ({from,roomId,callType}) => {
       dispatch(setIncomingVideoCall({incomingVideoCall:{...from,roomId,callType}}));
     });
-
     socket?.current?.on("voice-call-rejected", () => {
       dispatch(EndCall())
     });
-
     socket?.current?.on("video-call-rejected", () => {
       dispatch(EndCall())
     });
-      // setsocketEvent(true); 
+    socket.current.on("online-users",({onlineUsers})=>{
+      dispatch(setOnlineUser({onlineUsers}))
+    })
     }
   }, [socket?.current]);
 
@@ -72,7 +71,6 @@ function Main() {
       const { data } = await axios.get(
         `${GET_MESSAGE_ROUTE}/${UserInfo.id}/${CurrentChatUser.id}`
       );
-      // console.log({data})
       dispatch(setMessages({ data }));
     };
 
@@ -100,7 +98,7 @@ function Main() {
       )}
       {!videoCall && !voiceCall && (
         <div className="grid md:grid-cols-main h-screen w-screen max-h-screen max-w-full ">
-          <ChatList />
+          <ChatList socket={socket} />
           {CurrentChatUser ? (
             <div
             className={`${
