@@ -90,7 +90,7 @@ function Avatar({ type, image, setimage }) {
             <span className="context-openers">Change profile photo</span>
           </div>
         <div onClick={e=>showContextMenu(e)} className="context-openers flex items-center h-60 w-60">
-          <Image src={image} className="context-openers rounded-full" alt="avatar" height={250} width={250}/>
+          <Image src={UserInfo?.profileImage} className="context-openers rounded-full" alt="avatar" height={250} width={250}/>
         </div>
         </div>
       )}

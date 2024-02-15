@@ -19,8 +19,16 @@ function SearchMessages() {
       setMessageSearch([])
     }
   },[searchTrem])
+
+  const handleSetSearchTerm = (e) => {
+    setsearchTrem(e.target.value)
+    if(e.target.value===''){
+      setsearchedMessaged([])
+    }
+  }
   return (
-    <div className={`border-conversation-border border-1 md:w-auto w-screen bg-conversation-panel-background flex flex-col z-10 max-h-screen absolute top-0 h-full transition-all duration-500  ${MessageSearch ? 'left-0' : '-left-[100vw]'}`} >
+    // border-conversation-border border-1 w-full bg-conversation-panel-background flex flex-col z-10 max-h-screen
+    <div className={`border-conversation-border border-1 md:w-full w-screen bg-conversation-panel-background flex flex-col z-10 max-h-screen h-screen md:relative absolute top-0 transition-all duration-500  ${MessageSearch ? 'left-0' : '-left-[100vw] hidden'}`} >
       <div className="h-16 px-4 py-5 flex gap-10 items-center bg-panel-header-background text-primary-strong">
         <IoClose
           className="cursor-pointer text-icon-lighter text-2xl"
@@ -28,7 +36,7 @@ function SearchMessages() {
         />
         <span>Search messages</span>
       </div>
-      <div className="overflow-auto h-full">
+      <div className="">
         <div className="flex items-center flex-col w-full">
           <div className="flex px-5 items-center gap-3 h-14 w-full">
             <div className="bg-panel-header-background flex items-center gap-5 px-3 py-1 rounded-lg flex-grow">
@@ -41,29 +49,26 @@ function SearchMessages() {
                   placeholder="Search messages"
                   type="text"
                   value={searchTrem}
-                  onChange={(e)=>{setsearchTrem(e.target.value)}}
+                  onChange={(e)=>{handleSetSearchTerm(e)}}
+
                 />
               </div>
             </div>
           </div>
-          <span className="mt-10 text-secondary">
-          {
-            !searchTrem.length && `search for messages with ${CurrentChatUser.name}`
-          }
+          <span className={`mt-10 ${searchTrem.length==0?"":"hidden"} text-secondary`}>
+          {`search for messages with ${CurrentChatUser.name}`}
           </span>
         </div>
-        <div className="flex justify-center h-full flex-col" > 
-        {
-          searchTrem.length > 0 && !searchedMessaged.length && <span className="text-secondary w-full flex justify-center" >
+        <div className={`flex ${searchedMessaged.length>0?"h-[80vh]":""}  flex-col`} > 
+        <span className={`${searchTrem.length > 0 && !searchedMessaged.length?"":"hidden"} text-secondary w-full flex justify-center`} >
             No messages found
           </span>
-        }
-        <div className="flex flex-col w-full h-full">
+        <div className="flex flex-col w-full overflow-y-scroll custom-scrollbar-width-0">
           {
             searchedMessaged.map((msg)=>{
               return <div className="flex cursor-pointer flex-col w-full px-5 border-b-[0.1px] py-5 border-secondary justify-center hover:bg-background-default-hover">
                 <div className="text-secondary text-sm">
-                  {calculateTime(msg.createAt)}
+                  {calculateTime(msg.createdAt)}
                 </div>
                 <div className="text-icon-green" >
                   {msg.message}

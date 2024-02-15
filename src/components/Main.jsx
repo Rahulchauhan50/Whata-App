@@ -4,8 +4,8 @@ import Empty from "./Empty";
 import Chat from "./Chat/Chat";
 import { useSelector } from "react-redux";
 import axios from "axios";
-import { GET_MESSAGE_ROUTE, HOST } from "@/utils/ApiRoutes";
-import { setMessages, setOnlineUser } from "@/redux/features/userSlice";
+import { GET_INITIAL_CONTACT_ROUTE, GET_MESSAGE_ROUTE, HOST } from "@/utils/ApiRoutes";
+import { setMessages, setOnlineUser, setUserContacts } from "@/redux/features/userSlice";
 import { useDispatch } from "react-redux";
 import { io } from "socket.io-client";
 import {EndCall, setSocket, setAddMessages, setIncomingVoiceCall, setIncomingVideoCall } from "@/redux/features/userSlice";
@@ -20,12 +20,13 @@ function Main() {
   const {
     MessageSearch,
     UserInfo,
-    CurrentChatUser,
     videoCall,
     voiceCall,
     incomingVideoCall,
     incomingVoiceCall,
+    Messages
   } = useSelector((state) => state.user);
+  const {CurrentChatUser} = useSelector((state)=>state.user)
   const [socketEvent, setsocketEvent] = useState(false);
   const dispatch = useDispatch();
   const socket = useRef();
@@ -36,15 +37,36 @@ function Main() {
       socket.current.on("connect", () => {
         dispatch(setSocket({ socketId: socket.current.id }));
       });
+      // socket.current.on("disconnect", () => {
+      //   // Perform actions when socket disconnects
+      //   console.log("Socket disconnected");
+      //   // Additional actions can be performed here
+      // });
       socket.current.emit("add-user", UserInfo?.id);
       // dispatch(setSocket({socketId: socket.current.id }));
     }
   }, [UserInfo?.id]);
 
+  const getContacts = async () =>{
+    // alert("sdhjhjs")
+    try {
+      const {data:{users,onlineUsers}} = await axios.get(`${GET_INITIAL_CONTACT_ROUTE}/${UserInfo?.id}`)
+      dispatch(setUserContacts({userContacts:users}));
+      dispatch(setOnlineUser({onlineUsers}));
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+
   useEffect(() => {
     if(socket.current){
     socket?.current?.on("msg-recieve", (data) => {
-      dispatch(setAddMessages(data));
+      // alert("ddhjdh")
+      if(CurrentChatUser !== undefined && CurrentChatUser.id === data.senderId){
+        dispatch(setAddMessages(data));
+      }
+      getContacts();
     });
 
     socket?.current?.on("incoming-voice-call", ({from,roomId,callType}) => {
@@ -64,17 +86,28 @@ function Main() {
       dispatch(setOnlineUser({onlineUsers}))
     })
     }
-  }, [socket?.current]);
+
+  //   return () => {
+  //     socket.current?.disconnect();
+  //     socket.current?.off('disconnect');
+  //     socket.current?.emit('DisconnectEvent')
+  // };
+  }, [socket.current,CurrentChatUser]);
+
 
   useEffect(() => {
     const getMessages = async () => {
       const { data } = await axios.get(
         `${GET_MESSAGE_ROUTE}/${UserInfo.id}/${CurrentChatUser.id}`
       );
+      const {data:{users,onlineUsers}} = await axios.get(`${GET_INITIAL_CONTACT_ROUTE}/${UserInfo?.id}`)
+      dispatch(setUserContacts({userContacts:users}));
+      dispatch(setOnlineUser({onlineUsers}));
       dispatch(setMessages({ data }));
     };
 
     if (UserInfo?.id && CurrentChatUser?.id) {
+      // getContacts();
       getMessages();
     }
   }, [CurrentChatUser]);

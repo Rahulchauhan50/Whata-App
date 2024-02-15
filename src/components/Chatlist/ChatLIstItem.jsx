@@ -1,13 +1,14 @@
 import React from "react";
 import Avatar from "../common/Avatar";
-import { setCurrentChatUser,setConstactPage, setMessages } from "@/redux/features/userSlice";
+import { setCurrentChatUser,setConstactPage, setMessages, setUserContacts, setOnlineUser } from "@/redux/features/userSlice";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import { calculateTime } from "@/utils/CalculateTime";
 import MessageStatus from "../common/MessageStatus";
 import { FaCamera, FaMicrophone } from "react-icons/fa";
+import { GET_INITIAL_CONTACT_ROUTE } from "@/utils/ApiRoutes";
 
-function ChatLIstItem({ data, isContactpage = false,lastMessage=false, unreadMessageCount=0 }) {
+function ChatLIstItem({ socket, data, isContactpage = false,lastMessage=false, unreadMessageCount=0 }) {
   const dispatch = useDispatch();
   const { CurrentChatUser } = useSelector((state) => state.user)
   const { UserInfo } = useSelector((state) => state.user)
@@ -16,13 +17,15 @@ function ChatLIstItem({ data, isContactpage = false,lastMessage=false, unreadMes
     if (data?.id !== CurrentChatUser?.id) {
       dispatch(setMessages({data:{message:[]}}))
       dispatch(setCurrentChatUser({ data }));
+      socket.current.emit("send-msg-read", {to:data.id , by:UserInfo.id})
+      
       if(isContactpage){
         dispatch(setConstactPage())
       }
     }
   }
 
-  return <div className={`flex cursor-pointer items-center hover:bg-background-default-hover`} onClick={HandleContactClick} >
+  return <div className={`flex cursor-pointer items-center pr-2 hover:bg-background-default-hover`} onClick={HandleContactClick} >
     <div className="min-w-fit px-5 pt-3 pb-1">
       <Avatar type="lg" image={data?.profileImage} />
     </div>

@@ -12,7 +12,7 @@ import CustomContextMenu from "../common/CustomContextMenu";
 
 function ChatListHeader({socket}) {
   const dispatch = useDispatch();
-  const { UserInfo } = useSelector((state) => state.user)
+  const { UserInfo,IsfetchingUser } = useSelector((state) => state.user)
   const router = useRouter()
 
   
@@ -45,8 +45,15 @@ function ChatListHeader({socket}) {
 
 
   return <div className="h-16 px-4 py-3 flex justify-between items-center">
-    <div className="cursor-pointer">
-      <Avatar type="sm" image={UserInfo?.profileImage}/>
+    <div  className="cursor-pointer">
+      {
+        IsfetchingUser? <div className="animate-pulse flex space-x-4">
+
+        <div className="rounded-full bg-slate-700 h-10 w-10"></div>
+      </div>:<Avatar  type="sm" image={UserInfo?.profileImage}/>
+      }
+      
+     
     </div>
     <div className="flex gap-6">
       <BsFillChatLeftTextFill onClick={()=>{dispatch(setConstactPage());}} className="text-panel-header-icon cursor-pointer text-xl" title="New Chat" />

@@ -20,7 +20,7 @@ function ChatList({socket}) {
 
 
   return <div className={`${CurrentChatUser?"hidden md:flex":"flex" } bg-panel-header-background flex-col max-h-screen z-20`}>
-    {!ConstactPage ?(<><ChatListHeader socket={socket} /><SearchBar/><List/></>):<ContactsList/>}
+    {!ConstactPage ?(<><ChatListHeader socket={socket} /><SearchBar/><List socket={socket} /></>):<ContactsList socket={socket} />}
     
      
   </div>;

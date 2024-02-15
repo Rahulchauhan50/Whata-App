@@ -21,7 +21,9 @@ const initialState = {
   videoCall:undefined,
   voiceCall:undefined,
   incomingVideoCall:undefined,
-  incomingVoiceCall:undefined
+  incomingVoiceCall:undefined,
+  Read:false,
+  IsfetchingUser:true
 
 };
 
@@ -51,17 +53,17 @@ const UserSlice = createSlice({
       if(action.payload?.id){
         state.UserInfo.id = action.payload.id;
       }
-      else{
-        state.UserInfo = {
-          name:"",
-          email:"",
-          profileImage:"/default_avatar.png",
-          status:"",
-          about:"Hi there! i am using whatsApp",
-          NewUser:"",
-          id:undefined,
-        }
-      }
+      // else{
+      //   state.UserInfo = {
+      //     name:"",
+      //     email:"",
+      //     profileImage:"/default_avatar.png",
+      //     status:"",
+      //     about:"Hi there! i am using whatsApp",
+      //     NewUser:"",
+      //     id:undefined,
+      //   }
+      // }
     },
     setConstactPage:(state, action) => {
       state.ConstactPage = !state.ConstactPage;
@@ -70,13 +72,15 @@ const UserSlice = createSlice({
       state.CurrentChatUser = action.payload.data;
     },
     setMessages:(state, action) => {
-      state.Messages = action.payload.data.messages;
+      state.Messages = action.payload.data.message;
     },
     setSocket:(state, action) => {
       state.socket = action.payload;
     },
     setAddMessages:(state, action) => {
-      state.Messages = [...state.Messages, action.payload];
+      if(state.CurrentChatUser){
+        state.Messages = [...state.Messages, action.payload];
+      }
     },
     setMessageSearch:(state, action) => {
       state.MessageSearch = !state.MessageSearch
@@ -117,12 +121,33 @@ const UserSlice = createSlice({
       state.voiceCall=undefined
       state.incomingVideoCall=undefined
       state.incomingVoiceCall=undefined
+    },
+    setRead:(state, action) => {
+      state.Read = action.payload;
+      var rrrr = JSON.parse(JSON.stringify(state.Messages))
+      var arr = []
+      rrrr.map((msg)=>{
+       if(msg.messageStatus !== "read"){
+        arr = [...arr, {createdAt:msg.createdAt,
+          id:msg.id,message:msg.message,
+          messageStatus:"read",
+          recieverId:msg.recieverId,
+          senderId:msg.senderId,
+          type:msg.type}]
+       }else{
+        arr = [...arr,msg]
+       }
+      })
+      state.Messages = [...arr];
+    },
+    setIsfetchingUser:(state, action) => {
+      state.IsfetchingUser = action.payload;
     }
   },
 });
 
 
 
-export const {setUserInfo, setConstactPage, setCurrentChatUser, setMessages, setSocket, setAddMessages, setMessageSearch, setUserContacts, setOnlineUser, setfilteredContacts, setVideoCall, setVoiceCall, setIncomingVideoCall, setIncomingVoiceCall, EndCall} = UserSlice.actions;
+export const {setUserInfo, setConstactPage, setCurrentChatUser, setMessages, setSocket, setAddMessages, setMessageSearch, setUserContacts, setOnlineUser, setfilteredContacts, setVideoCall, setVoiceCall, setIncomingVideoCall, setIncomingVoiceCall, EndCall, setRead, setIsfetchingUser} = UserSlice.actions;
 
 export default UserSlice.reducer;

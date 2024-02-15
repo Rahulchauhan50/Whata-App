@@ -1,11 +1,11 @@
-import { ADD_IMAGE_MESSAGE_ROUTE, ADD_MESSAGE_ROUTE } from "@/utils/ApiRoutes";
+import { ADD_IMAGE_MESSAGE_ROUTE, ADD_MESSAGE_ROUTE, GET_INITIAL_CONTACT_ROUTE } from "@/utils/ApiRoutes";
 import axios from "axios";
 import React, { useEffect, useRef, useState } from "react";
 import { BsEmojiSmile } from "react-icons/bs";
 import { ImAttachment } from "react-icons/im";
 import { MdSend } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
-import { setAddMessages } from "@/redux/features/userSlice";
+import { setAddMessages, setOnlineUser, setUserContacts } from "@/redux/features/userSlice";
 import EmojiPicker from "emoji-picker-react";
 import PhotoPicker from "../common/PhotoPicker";
 import { FaMicrophone } from "react-icons/fa";
@@ -44,31 +44,46 @@ function MessageBar({ socket }) {
           to: CurrentChatUser.id,
         },
       });
+      console.log(resopnse)
       if (resopnse.status === 201) {
         console.log(resopnse);
         dispatch(
           setAddMessages({
             senderId: UserInfo?.id,
-            message: resopnse.data.message.message,
+            message: resopnse.data,
             recieverId: CurrentChatUser?.id,
             type: "image",
-            createAt: Date.now(),
-            messageStatus: "sent",
+            createdAt: Date.now(),
+            messageStatus: resopnse.data.msgStatus,
           })
         );
         socket.current.emit("send-msg", {
           senderId: UserInfo?.id,
-          message: resopnse.data.message.message,
+          message: resopnse.data,
           recieverId: CurrentChatUser?.id,
           type: "image",
-          createAt: Date.now(),
-          messageStatus: "sent",
+          createdAt: Date.now(),
+          messageStatus: resopnse.data.msgStatus,
+          original:true
         });
+        getContacts();
       }
     } catch (error) {
       console.log(error);
     }
   };
+
+  const userTyping = () => {
+    socket.current.emit("typing", {
+      recieverId: CurrentChatUser?.id,
+    });
+  }
+
+  const userTypingblur = () => {
+    socket.current.emit("typingblur", {
+      recieverId: CurrentChatUser?.id,
+    });
+  }
 
   const HandleEmojiClick = (emoji) => {
     setMessage((preMeessage) => (preMeessage += emoji.emoji));
@@ -89,7 +104,17 @@ function MessageBar({ socket }) {
     return () => {
       document.removeEventListener("click", HandleOutside);
     };
-  });
+  },[]);
+
+  const getContacts = async () =>{
+    try {
+      const {data:{users,onlineUsers}} = await axios.get(`${GET_INITIAL_CONTACT_ROUTE}/${UserInfo?.id}`)
+      dispatch(setOnlineUser({onlineUsers}));
+      dispatch(setUserContacts({userContacts:users}));
+    } catch (error) {
+      console.log(error)
+    }
+  }
 
   const sendMessage = async (e) => {
     setMessage("");
@@ -100,14 +125,15 @@ function MessageBar({ socket }) {
         from: UserInfo?.id,
         message: Message,
       });
+      
       dispatch(
         setAddMessages({
           senderId: UserInfo?.id,
           message: Message,
           recieverId: CurrentChatUser?.id,
           type: "text",
-          createAt: Date.now(),
-          messageStatus: "sent",
+          createdAt: Date.now(),
+          messageStatus: data.message.messageStatus,
         })
       );
       socket.current.emit("send-msg", {
@@ -115,9 +141,10 @@ function MessageBar({ socket }) {
         message: Message,
         recieverId: CurrentChatUser?.id,
         type: "text",
-        createAt: Date.now(),
+        createdAt: Date.now(),
         messageStatus: "sent",
       });
+      getContacts()
     } catch (err) {
       console.log(err);
     }
@@ -136,7 +163,7 @@ function MessageBar({ socket }) {
   }, [grabPhoto]);
 
   return (
-    <div className="bg-panel-header-background h-20 px-4 flex items-center gap-6 md:w-auto w-full md:relative fixed bottom-0 left-0 ">
+    <div className="bg-panel-header-background md:h-20 h-[80px] px-4 flex items-center gap-6 md:w-auto w-full md:relative fixed bottom-0 left-0 ">
       {!showAudioRecorder && (
         <>
           <div className="flex gap-6">
@@ -167,6 +194,8 @@ function MessageBar({ socket }) {
             className="w-full rounded-lg h-10 flex items-center"
           >
             <input
+              onFocus={userTyping}
+              onBlur={userTypingblur}
               value={Message}
               onChange={(e) => setMessage(e.target.value)}
               type="text"

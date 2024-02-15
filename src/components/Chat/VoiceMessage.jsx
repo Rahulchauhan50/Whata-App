@@ -46,35 +46,30 @@ function VoiceMessage({ message }) {
   };
 
   useEffect(() => {
-    const audioURL = `${HOST}/${message.message}`;
-  
-    const audio = new Audio(audioURL);
-    setaudioMessage(audio);
-  
     if (WaveFormRef.current) {
-      if (WaveFormRef.current !== null) {
-        if (WaveFormRef.current !== undefined) {
-          WaveFormRef.current.innerHTML = ''; // Clear any previous content
-          WaveForm.current = WaveSurfer.create({
-            container: WaveFormRef.current,
-            waveColor: "#ccc",
-            progressColor: "#4a9eff",
-            cursorColor: "#7ae3c3",
-            barWidth: 2,
-            height: 30,
-            responsive: true,
-          });
+      // Clear any previous content
+      WaveFormRef.current.innerHTML = '';
   
-          WaveForm.current.on("finish", () => {
-            setIsPlaying(false);
-          });
+      WaveForm.current = WaveSurfer.create({
+        container: WaveFormRef.current,
+        waveColor: "#ccc",
+        progressColor: "#4a9eff",
+        cursorColor: "#7ae3c3",
+        barWidth: 2,
+        height: 30,
+        responsive: true,
+      });
   
-          WaveForm.current.load(audioURL);
-          WaveForm.current.on("ready", () => {
-            setTotalDuration(WaveForm.current.getDuration());
-          });
-        }
-      }
+      WaveForm.current.on("finish", () => {
+        setIsPlaying(false);
+      });
+  
+      // Load the audio buffer directly into WaveSurfer
+      WaveForm.current.loadBlob(new Blob([message.message.data]));
+  
+      WaveForm.current.on("ready", () => {
+        setTotalDuration(WaveForm.current.getDuration());
+      });
     }
   
     return () => {
@@ -83,6 +78,8 @@ function VoiceMessage({ message }) {
       }
     };
   }, [message.message]);
+  
+  
   
 
   useEffect(() => {
@@ -138,7 +135,7 @@ function VoiceMessage({ message }) {
       <span>{formatTime(IsPlaying?CurrentPlayBackTime:TotalDuration)}</span>
       <div className="absolute bottom-1 right-1 flex items-end gap-1">
           <span className="text-bubble-meta text-[11px] pt-1 min-w-fit">
-            {calculateTime(message.createAt)}
+            {calculateTime(message.createdAt)}
           </span>
           <span className="text-bubble-meta">
             {

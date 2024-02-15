@@ -8,7 +8,7 @@ import { setConstactPage } from "@/redux/features/userSlice";
 import { BiSearchAlt2 } from "react-icons/bi";
 import ChatLIstItem from "./ChatLIstItem";
 
-function ContactsList() {
+function ContactsList({socket}) {
   const [allContacts, setallContacts] = useState([]);
   const [serchTerm, setserchTerm] = useState('')
   const [searchContacts, setsearchContacts] = useState([])
@@ -76,7 +76,7 @@ function ContactsList() {
             {userList.length>0 && <div className="text-teal-light pl-10 py-5">{initialLetter}</div>}
               
               {userList.map((contacts) => {
-                return <ChatLIstItem className="" data={contacts} isContactpage={true} key={contacts.id} />;
+                return <ChatLIstItem socket={socket} className="" data={contacts} isContactpage={true} key={contacts.id} />;
               })}
             </div>
           );
@@ -85,7 +85,7 @@ function ContactsList() {
             <div key={Date.now() + initialLetter}>
               <div className="text-teal-light pl-10 py-5">{initialLetter}</div>
               {userList.map((contacts) => {
-                return <ChatLIstItem className="" data={contacts} isContactpage={true} key={contacts.id} />;
+                return <ChatLIstItem socket={socket} className="" data={contacts} isContactpage={true} key={contacts.id} />;
               })}
             </div>
           );

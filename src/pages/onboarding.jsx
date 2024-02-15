@@ -26,7 +26,7 @@ function onboarding() {
         image:UserInfo.profileImage,
         })
         if(data.status){
-          router.push('/')
+          // router.push('/')
         }
       } catch (error) {
         console.log(error)
@@ -43,21 +43,21 @@ function onboarding() {
 
   useEffect(()=>{
     if(!UserInfo?.NewUser && !UserInfo?.email ){
-      router.push("/login");
+      // router.push("/login");
     }else if(!UserInfo?.NewUser && UserInfo?.email){
-      router.push('/')
+      // router.push('/')
     }
   },[UserInfo,router])
 
-  return <div className="bg-panel-header-background h-screen w-screen text-white flex flex-col items-center justify-center">
-    <div className="flex items-center justify-center gap-2">
+  return <div className="bg-panel-header-background md:h-screen w-screen text-white flex flex-col items-center justify-center">
+    <div className="flex flex-col md:flex-row items-center justify-center gap-2">
       <Image src='/whatsapp.gif' alt="whatsapp" height={300} width={300} />
-      <span className="text-6xl">Whatsapp</span>
+      <span className="md:text-6xl text-4xl">Whatsapp</span>
     </div>
-    <h6 className="text-2xl">Create your account</h6>
-    <div className="flex mt-6 gap-6">
+    <h6 className="md:text-2xl text-xl">Create your account</h6>
+    <div className="flex flex-col-reverse md:flex-row mt-6 gap-6">
       {console.log(UserInfo)}
-      <div className="flex flex-col items-center justify-center mt-5 gap-6">
+      <div className="flex flex-col items-center justify-center mb-4 mt-5 gap-6">
         <div className="flex flex-col gap-1">
           <label htmlFor="name" className="text-teal-light text-lg px-1" >
             Display Name
@@ -80,7 +80,7 @@ function onboarding() {
         </div>
       </div>
       <div>
-        <Avatar type='xl' />
+        <Avatar type='xl' image={UserInfo?.profileImage} />
       </div>
 
     </div>
