@@ -104,6 +104,7 @@ function Main() {
       dispatch(setUserContacts({userContacts:users}));
       dispatch(setOnlineUser({onlineUsers}));
       dispatch(setMessages({ data }));
+      console.log(data)
     };
 
     if (UserInfo?.id && CurrentChatUser?.id) {

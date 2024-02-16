@@ -4,11 +4,12 @@ const initialState = {
   UserInfo:{
     name:"",
     email:"",
-    profileImage:"/default_avatar.png",
+    profileImage:null,
     status:"",
     about:"Hi there! i am using whatsApp",
     NewUser:"",
     id:undefined,
+    profileImageTemp:"/default_avatar.png",
   },
   ConstactPage:false,
   CurrentChatUser:undefined,
@@ -23,8 +24,7 @@ const initialState = {
   incomingVideoCall:undefined,
   incomingVoiceCall:undefined,
   Read:false,
-  IsfetchingUser:true
-
+  IsfetchingUser:true,
 };
 
 const UserSlice = createSlice({
@@ -52,6 +52,9 @@ const UserSlice = createSlice({
       }
       if(action.payload?.id){
         state.UserInfo.id = action.payload.id;
+      }
+      if(action.payload?.profileImageTemp){
+        state.UserInfo.profileImageTemp = action.payload.profileImageTemp;
       }
       // else{
       //   state.UserInfo = {

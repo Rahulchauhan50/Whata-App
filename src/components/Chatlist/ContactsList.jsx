@@ -21,6 +21,7 @@ function ContactsList({socket}) {
       } = await axios.get(GET_ALL_CONTACTS);
       setallContacts(users);
       setsearchContacts(users);
+      console.log(users)
     } catch (error) {
       console.log(error);
     }

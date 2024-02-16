@@ -1,4 +1,5 @@
-export const HOST = 'https://whatsapp-p2yq.onrender.com'
+export const HOST = process.env.NEXT_PUBLIC_HOST
+
 
 const AUTH_ROUTE = `${HOST}/api/auth`
 const MESSAGES_ROUTE = `${HOST}/api/messages`

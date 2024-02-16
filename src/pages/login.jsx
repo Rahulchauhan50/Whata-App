@@ -53,7 +53,7 @@ function login() {
           dispatch(setUserInfo({
             name: user.displayName,
             email: user.email,
-            profileImage: user.photoURL,
+            profileImageTemp: user.photoURL,
             status: "available",
             NewUser: true
           }));
@@ -80,7 +80,7 @@ function login() {
       if (email) {
         const { data } = await axios.post(CHECK_USER_ROUTE, { email });
         if (!data.status) {
-          dispatch(setUserInfo({ name: user.displayName, email: user.email, profileImage: user.photoURL, status: "available", NewUser: true }));
+          dispatch(setUserInfo({ name: user.displayName, email: user.email, profileImageTemp: user.photoURL, status: "available", NewUser: true }));
           router.push("/onboarding")
         } else if (data.status) {
           router.push("/")

@@ -44,26 +44,25 @@ function MessageBar({ socket }) {
           to: CurrentChatUser.id,
         },
       });
-      console.log(resopnse)
       if (resopnse.status === 201) {
-        console.log(resopnse);
+        console.log(resopnse.data.message.messageStatus);
         dispatch(
           setAddMessages({
             senderId: UserInfo?.id,
-            message: resopnse.data,
+            message: resopnse.data.message.message,
             recieverId: CurrentChatUser?.id,
             type: "image",
             createdAt: Date.now(),
-            messageStatus: resopnse.data.msgStatus,
+            messageStatus: resopnse.data.message.messageStatus,
           })
         );
         socket.current.emit("send-msg", {
           senderId: UserInfo?.id,
-          message: resopnse.data,
+          message: resopnse.data.message.message,
           recieverId: CurrentChatUser?.id,
           type: "image",
           createdAt: Date.now(),
-          messageStatus: resopnse.data.msgStatus,
+          messageStatus: resopnse.data.message.messageStatus,
           original:true
         });
         getContacts();
@@ -223,7 +222,7 @@ function MessageBar({ socket }) {
         </>
       )}
       {grabPhoto && <PhotoPicker onChange={photoPickerChange} />}
-      {showAudioRecorder && <CaptureAudio hide={setshowAudioRecorder} />}
+      {showAudioRecorder && <CaptureAudio socket={socket} hide={setshowAudioRecorder} />}
     </div>
   );
 }

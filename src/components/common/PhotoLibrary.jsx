@@ -18,6 +18,12 @@ function PhotoLibrary({hidePhotoLibrary}) {
     "/avatars/8.png",
     "/avatars/9.png",
   ]
+  const handleclick = (img) => {
+    dispatch(setUserInfo({profileImage:img}));
+    dispatch(setUserInfo({profileImageTemp:img}));
+    hidePhotoLibrary(false)
+
+  }
   return <div className="fixed top-0 left-0 max-h-[100vh] max-width-[100vw] flex h-full w-full justify-center items-center">
     <div className="h-max w-max bg-gray-900 gap-6 rounded-lg p-4">
       <div onClick={()=>{hidePhotoLibrary(false)}} className="pt-2 pe-2 cursor-pointer flex items-end justify-end">
@@ -25,7 +31,7 @@ function PhotoLibrary({hidePhotoLibrary}) {
       </div>
       <div className="grid grid-cols-3 justify-center items-center gap-16 p-20 w-full">
         {images.map((img,i)=>(
-          <div onClick={()=>{dispatch(setUserInfo({profileImage:img}));hidePhotoLibrary(false)}}>
+          <div onClick={()=>handleclick(img)}>
             <div className="h-24 w-24 cursor-pointer relative">
               <Image src={img} alt='avatar' fill />
 

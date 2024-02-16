@@ -24,6 +24,7 @@ function index() {
             // router.push('/login')
           }
           else if(data.status){
+            console.log(data)
             dispatch(setUserInfo({name:data.data.name,email:data.data.email,profileImage:data.data.profileImage, status:"available",NewUser:false,id:data.data.id}));
             dispatch(setIsfetchingUser(false));
           }

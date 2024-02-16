@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image"
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
@@ -6,28 +6,41 @@ import { setUserInfo } from '@/redux/features/userSlice';
 import Input from "@/components/common/Input";
 import Avatar from "@/components/common/Avatar";
 import axios from "axios";
-import { ONBOARD_USER_ROUTE } from "@/utils/ApiRoutes";
+import { ADD_IMAGE_MESSAGE_ROUTE, ONBOARD_USER_ROUTE } from "@/utils/ApiRoutes";
 import { useRouter } from "next/router";
 
 function onboarding() {
   const router = useRouter();
   const { UserInfo } = useSelector((state) => state.user)
   const dispatch = useDispatch();
+  const [profileImageUpload,setprofileImageUpload] = useState(null)
 
   const onBoardUserHandler = async () => {
     if(validateDetails()){
-      const email = UserInfo?.email;
-
+      console.log("sdhjdshj")
+      console.log(UserInfo.profileImage)
+     
       try {
-        const {data} = await axios.post(ONBOARD_USER_ROUTE,{
-        email,
-        name:UserInfo.name,
-        about:UserInfo.about,
-        image:UserInfo.profileImage,
-        })
-        if(data.status){
-          // router.push('/')
-        }
+       
+          const formData = new FormData();
+          formData.append("image", profileImageUpload);
+  
+          const {data} = await axios.post(ONBOARD_USER_ROUTE,formData,{
+            headers:{
+              "Content-Type": "multitpart/form-data",
+            },
+            params:{
+              email:UserInfo.email,
+              name:UserInfo.name,
+              about:UserInfo.about,
+              image:UserInfo.profileImage
+              }
+          })
+          if(data.status){
+            router.push('/')
+          }
+          
+        
       } catch (error) {
         console.log(error)
       }
@@ -43,9 +56,9 @@ function onboarding() {
 
   useEffect(()=>{
     if(!UserInfo?.NewUser && !UserInfo?.email ){
-      // router.push("/login");
+      router.push("/login");
     }else if(!UserInfo?.NewUser && UserInfo?.email){
-      // router.push('/')
+      router.push('/')
     }
   },[UserInfo,router])
 
@@ -56,7 +69,6 @@ function onboarding() {
     </div>
     <h6 className="md:text-2xl text-xl">Create your account</h6>
     <div className="flex flex-col-reverse md:flex-row mt-6 gap-6">
-      {console.log(UserInfo)}
       <div className="flex flex-col items-center justify-center mb-4 mt-5 gap-6">
         <div className="flex flex-col gap-1">
           <label htmlFor="name" className="text-teal-light text-lg px-1" >
@@ -80,7 +92,7 @@ function onboarding() {
         </div>
       </div>
       <div>
-        <Avatar type='xl' image={UserInfo?.profileImage} />
+        <Avatar type='xl' image={UserInfo?.profileImage} setprofileImageUpload={setprofileImageUpload}/>
       </div>
 
     </div>

@@ -27,7 +27,7 @@ function ChatLIstItem({ socket, data, isContactpage = false,lastMessage=false, u
 
   return <div className={`flex cursor-pointer items-center pr-2 hover:bg-background-default-hover`} onClick={HandleContactClick} >
     <div className="min-w-fit px-5 pt-3 pb-1">
-      <Avatar type="lg" image={data?.profileImage} />
+      <Avatar type="lg" image={data.profileImage}  />
     </div>
     <div className="min-h-fit flex flex-col justify-center mt-3 pr-2 w-full ">
       <div className="flex justify-between ">

@@ -46,30 +46,35 @@ function VoiceMessage({ message }) {
   };
 
   useEffect(() => {
+    const audioURL = `${HOST}/${message.message}`;
+  
+    const audio = new Audio(audioURL);
+    setaudioMessage(audio);
+  
     if (WaveFormRef.current) {
-      // Clear any previous content
-      WaveFormRef.current.innerHTML = '';
+      if (WaveFormRef.current !== null) {
+        if (WaveFormRef.current !== undefined) {
+          WaveFormRef.current.innerHTML = ''; // Clear any previous content
+          WaveForm.current = WaveSurfer.create({
+            container: WaveFormRef.current,
+            waveColor: "#ccc",
+            progressColor: "#4a9eff",
+            cursorColor: "#7ae3c3",
+            barWidth: 2,
+            height: 30,
+            responsive: true,
+          });
   
-      WaveForm.current = WaveSurfer.create({
-        container: WaveFormRef.current,
-        waveColor: "#ccc",
-        progressColor: "#4a9eff",
-        cursorColor: "#7ae3c3",
-        barWidth: 2,
-        height: 30,
-        responsive: true,
-      });
+          WaveForm.current.on("finish", () => {
+            setIsPlaying(false);
+          });
   
-      WaveForm.current.on("finish", () => {
-        setIsPlaying(false);
-      });
-  
-      // Load the audio buffer directly into WaveSurfer
-      WaveForm.current.loadBlob(new Blob([message.message.data]));
-  
-      WaveForm.current.on("ready", () => {
-        setTotalDuration(WaveForm.current.getDuration());
-      });
+          WaveForm.current.load(audioURL);
+          WaveForm.current.on("ready", () => {
+            setTotalDuration(WaveForm.current.getDuration());
+          });
+        }
+      }
     }
   
     return () => {
@@ -78,8 +83,6 @@ function VoiceMessage({ message }) {
       }
     };
   }, [message.message]);
-  
-  
   
 
   useEffect(() => {
@@ -105,6 +108,7 @@ function VoiceMessage({ message }) {
   }, []);
 
   useEffect(() => {
+    console.log(message)
     const audioURL = `${HOST}/${message.message}`;
     console.log(audioURL)
     const audio = new Audio(audioURL);

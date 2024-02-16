@@ -125,8 +125,8 @@ function Container({socket,data}) {
   // },[token])
 
   const Mymeetings = (element) => {
-    const appId = 366589160
-    const serversecret = "b53e2b1c2246bbb3626d71b9bc55fdb8"
+    const appId = parseInt(process.env.NEXT_PUBLIC_ZEGO_APP_ID)
+    const serversecret = process.env.NEXT_PUBLIC_ZEGO_SERVER_ID
     const kitToken = ZegoUIKitPrebuilt.generateKitTokenForTest(appId, serversecret,"ghsdhsdj", Date.now().toString(), "rahul")
     const zc = ZegoUIKitPrebuilt.create(kitToken);
     console.log(zc)

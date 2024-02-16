@@ -1,15 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
-import { setUserInfo } from '@/redux/features/userSlice';
+import userSlice, { setUserInfo } from '@/redux/features/userSlice';
 import Image from "next/image";
 import { FaCamera } from "react-icons/fa"
 import ContextMenu from "./ContextMenu";
 import PhotoPicker from "./PhotoPicker";
 import PhotoLibrary from "./PhotoLibrary";
 import CapturePhoto from "./CapturePhoto";
+import { HOST } from "@/utils/ApiRoutes";
 
-function Avatar({ type, image, setimage }) {
+function Avatar({ type, image, setimage, setprofileImageUpload }) {
   const { UserInfo } = useSelector((state) => state.user)
   const dispatch = useDispatch();
   const [Hover, setHover] = useState(false)
@@ -30,7 +31,7 @@ function Avatar({ type, image, setimage }) {
       setgrabPhoto(true)
     }},
     {name:"Remove Photo",callback:() => {
-      dispatch(setUserInfo({profileImage:"/default_avatar.png"}));
+      dispatch(setUserInfo({profileImageTemp:"/default_avatar.png"}));
     }}
   ]
 
@@ -54,8 +55,8 @@ function Avatar({ type, image, setimage }) {
   },[grabPhoto])
 
   const photoPickerChange = async (e) => {
-    console.log("rahul")
     const file = e.target.files[0];
+    setprofileImageUpload(file)
     const reader = new FileReader();
     const data = document.createElement('img');
     reader.onload = function (event){
@@ -64,15 +65,14 @@ function Avatar({ type, image, setimage }) {
     }
     reader.readAsDataURL(file)
     setTimeout(()=>{
-      dispatch(setUserInfo({profileImage:data.src}));
-      console.log()
+      dispatch(setUserInfo({profileImageTemp:data.src}));
+      dispatch(setUserInfo({profileImage:null}));
     },3000)
 
   }
-
+  
   return <>
     <div className="flex items-center justify-center">
-
       {type == "sm" && (
         <div className="context-openers relative h-10 w-10">
           <Image src={image} className="rounded-full" alt="avatar" width={50} height={50}/>
@@ -90,7 +90,7 @@ function Avatar({ type, image, setimage }) {
             <span className="context-openers">Change profile photo</span>
           </div>
         <div onClick={e=>showContextMenu(e)} className="context-openers flex items-center h-60 w-60">
-          <Image src={UserInfo?.profileImage} className="context-openers rounded-full" alt="avatar" height={250} width={250}/>
+          <Image src={UserInfo?.profileImageTemp} className="context-openers rounded-full" alt="avatar" height={250} width={250}/>
         </div>
         </div>
       )}
@@ -98,7 +98,7 @@ function Avatar({ type, image, setimage }) {
     <div>
       {IsContextMenuVisible && <ContextMenu options={contextMenuOptions} cordinate={contextMenuCordinates} contextMenu={IsContextMenuVisible} setContextMenu={setIsContextMenuVisible}/>}
       {showPhotoLibrary && <PhotoLibrary hidePhotoLibrary={setshowPhotoLibrary} />}
-      {showCapturePhoto && <CapturePhoto hide={setshowCapturePhoto} /> }
+      {showCapturePhoto && <CapturePhoto setprofileImageUpload={setprofileImageUpload} hide={setshowCapturePhoto} /> }
       {grabPhoto && <PhotoPicker onChange={photoPickerChange} />}
     </div>
 

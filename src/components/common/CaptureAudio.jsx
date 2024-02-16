@@ -8,11 +8,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { setAddMessages } from "@/redux/features/userSlice";
 
 
-function CaptureAudio({ hide }) {
+function CaptureAudio({ hide, socket}) {
   const dispatch = useDispatch();
   const { UserInfo } = useSelector((state) => state.user);
   const { CurrentChatUser } = useSelector((state) => state.user);
-  const { socket } = useSelector((state) => state.user);
   
 
   const [IsRecording, setIsRecording] = useState(false);
@@ -72,6 +71,7 @@ function CaptureAudio({ hide }) {
       console.error("error accessing microphone",error)
     })
   };
+  
   const handleStopRecording = () => {
     if(MediaRecorderRef.current && IsRecording){
       MediaRecorderRef.current.stop();
@@ -101,6 +101,7 @@ function CaptureAudio({ hide }) {
       console.log(AudioRef)
     }
   };
+
   const handlePlayRecording = () => {
     if(RecordedAudio){
       waveForm.stop()
@@ -109,18 +110,19 @@ function CaptureAudio({ hide }) {
       setIsPlaying(true)
     }
   };
+
   const handlePauseRecording = () => {
     waveForm.stop();
     RecordedAudio.pause();
     setIsPlaying(false)
   };
 
- 
   const sendRecording = async () => {
     if(IsRecording){
       handleStopRecording()
     }
     try {
+      hide();
       const formData = new FormData();
       formData.append("audio", renderAudio);
 
@@ -141,8 +143,8 @@ function CaptureAudio({ hide }) {
             message: resopnse.data.message.message,
             recieverId: CurrentChatUser?.id,
             type: "audio",
-            createAt: Date.now(),
-            messageStatus: "sent",
+            createdAt: Date.now(),
+            messageStatus: resopnse.data.message.messageStatus,
           })
         );
         socket.current.emit("send-msg", {
@@ -150,16 +152,14 @@ function CaptureAudio({ hide }) {
           message: resopnse.data.message.message,
           recieverId: CurrentChatUser?.id,
           type: "audio",
-          createAt: Date.now(),
-          messageStatus: "sent",
+          createdAt: Date.now(),
+          messageStatus:  resopnse.data.message.messageStatus,
         });
       }
     } catch (error) {
       console.log(error);
     }
   };
-
- 
 
   const formatTime = (time) => {
     if (isNaN(time)) return "00:00";

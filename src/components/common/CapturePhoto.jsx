@@ -5,7 +5,7 @@ import { useSelector } from "react-redux";
 import { setUserInfo } from '@/redux/features/userSlice';
 
 
-function CapturePhoto({hide}) {
+function CapturePhoto({hide, setprofileImageUpload}) {
 
   const videoRef = useRef(null)
   const dispatch = useDispatch();
@@ -28,7 +28,10 @@ function CapturePhoto({hide}) {
   const capturePhoto = () => {
     const canvas = document.createElement('canvas');
     canvas.getContext("2d").drawImage(videoRef.current,0,0,300,150)
-    dispatch(setUserInfo({profileImage:canvas.toDataURL('image/jpeg')}));
+    dispatch(setUserInfo({profileImageTemp:canvas.toDataURL('image/jpeg')}));
+    dispatch(setUserInfo({profileImage:null}));
+    setprofileImageUpload(canvas.toDataURL('image/jpeg'))
+
     hide(false)
     
   }
