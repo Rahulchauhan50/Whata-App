@@ -36,7 +36,12 @@ function ChatContainer({socket}) {
     <div className="lg:mx-10 mx-4 my-6 relative bottom-0 z-40 left-0">
       <div className="flex w-full">
         <div className="flex flex-col justify-end w-full gap-2 md:mb-2 mb-24">
-          {Messages?.map((msg, index ) => (
+          {
+            Object.entries(Messages).map(([date, messageList])=>{
+              return (
+                <div key={date} className="flex flex-col justify-end w-full gap-2 md:mb-2 mb-24" >
+                <div className="text-teal-light pl-10 py-5">{calculateTime(date)}</div>
+                {messageList?.map((msg, index ) => (
             <div key={index} className={`flex max-w-full ${msg.senderId === CurrentChatUser?.id ? "justify-start" : "justify-end"}`}>
               {msg.type === "text" && (
                 <div className={`text-white px-2 py-[5px] text-sm rounded-md flex gap-2 items-end max-w-[90%] ${msg.senderId === CurrentChatUser?.id ? "bg-incoming-background" : "bg-outgoing-background"}`}>
@@ -51,6 +56,11 @@ function ChatContainer({socket}) {
               {msg.type === "audio" && <VoiceMessage message={msg} />}
             </div>
           ))}
+              </div>
+              )
+            })
+          }
+         
         </div>
       </div>
     </div>

@@ -21,7 +21,7 @@ export const calculateTime = (inputDateStr) => {
   ) {
     // Today: Convert to AM/PM format
     const ampmTime = inputDate.toLocaleTimeString("en-US", timeFormat);
-    return ampmTime;
+    return "Today";
   } else if (
     inputDate.getUTCDate() === currentDate.getUTCDate() - 1 &&
     inputDate.getUTCMonth() === currentDate.getUTCMonth() &&
