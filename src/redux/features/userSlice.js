@@ -1,4 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
+import {calculateTime} from '../../utils/CalculateTime'
 
 const initialState = {
   UserInfo:{
@@ -82,7 +83,18 @@ const UserSlice = createSlice({
     },
     setAddMessages:(state, action) => {
       if(state.CurrentChatUser){
-        state.Messages = [...state.Messages, action.payload];
+        const keysArray = Object.keys(state.Messages);
+        const LastMsgDate = keysArray[keysArray.length - 1];
+        const newDate = new Date()
+        if(LastMsgDate === calculateTime(newDate.toString())){
+          state.Messages[LastMsgDate].push(action.payload);
+        }else {
+          alert(LastMsgDate)
+          alert(calculateTime(newDate.toString()))
+          const newKey = calculateTime(newDate.toString())
+          state.Messages[newKey] = [action.payload];
+        }
+       
       }
     },
     setMessageSearch:(state, action) => {
@@ -127,21 +139,57 @@ const UserSlice = createSlice({
     },
     setRead:(state, action) => {
       state.Read = action.payload;
-      var rrrr = JSON.parse(JSON.stringify(state.Messages))
-      var arr = []
-      rrrr.map((msg)=>{
-       if(msg.messageStatus !== "read"){
-        arr = [...arr, {createdAt:msg.createdAt,
-          id:msg.id,message:msg.message,
-          messageStatus:"read",
-          recieverId:msg.recieverId,
-          senderId:msg.senderId,
-          type:msg.type}]
-       }else{
-        arr = [...arr,msg]
-       }
+      var rrr = JSON.parse(JSON.stringify(state.Messages))
+     var arr = {};
+     Object.entries(rrr).map(([date, messageList])=>{
+      messageList.map((msg)=>{
+        if(msg.messageStatus !== "read"){
+          if(arr[date]){
+            arr[date].push({
+              createdAt:msg.createdAt,
+              id:msg.id,message:msg.message,
+              messageStatus:"read",
+              recieverId:msg.recieverId,
+              senderId:msg.senderId,
+              type:msg.type
+          });
+          }else{
+            arr[date] = [{
+              createdAt:msg.createdAt,
+              id:msg.id,message:msg.message,
+              messageStatus:"read",
+              recieverId:msg.recieverId,
+              senderId:msg.senderId,
+              type:msg.type
+          }]
+          }
+         
+        }
+        if(arr[date]){
+          arr[date].push({
+            createdAt:msg.createdAt,
+            id:msg.id,message:msg.message,
+            messageStatus:"read",
+            recieverId:msg.recieverId,
+            senderId:msg.senderId,
+            type:msg.type
+        });
+        }else{
+          arr[date] = [{
+            createdAt:msg.createdAt,
+            id:msg.id,message:msg.message,
+            messageStatus:"read",
+            recieverId:msg.recieverId,
+            senderId:msg.senderId,
+            type:msg.type
+        }]
+
+        }
+
       })
-      state.Messages = [...arr];
+     })
+
+    state.Messages = arr;
     },
     setIsfetchingUser:(state, action) => {
       state.IsfetchingUser = action.payload;
@@ -154,3 +202,17 @@ const UserSlice = createSlice({
 export const {setUserInfo, setConstactPage, setCurrentChatUser, setMessages, setSocket, setAddMessages, setMessageSearch, setUserContacts, setOnlineUser, setfilteredContacts, setVideoCall, setVoiceCall, setIncomingVideoCall, setIncomingVoiceCall, EndCall, setRead, setIsfetchingUser} = UserSlice.actions;
 
 export default UserSlice.reducer;
+
+
+const rrr =  [{ 
+  audiomessage: null,
+createdAt: "2024-02-16T16:35:48.980Z",
+id: "65cf8ee5f3db8ce8474362b1",
+imagemessages: [],
+message: "hii",
+messageStatus: "read",
+recieverId: "65a5693af97188731f6c17bc",
+senderId: "65a60e47531736198b93e805",
+type: "text"
+ 
+  }]

@@ -14,6 +14,13 @@ function ChatContainer({socket}) {
   const { Messages,CurrentChatUser,UserInfo } = useSelector((state) => state.user)
   const dispatch = useDispatch()
 
+  const getTime = (date) => {
+    const dateObject = new Date(date);
+    const options = { hour: 'numeric', minute: 'numeric', hour12: true };
+    const formattedTime = dateObject.toLocaleString('en-US', options);
+    return formattedTime.toString()
+  }
+
   
   
   useEffect(()=>{
@@ -39,15 +46,17 @@ function ChatContainer({socket}) {
           {
             Object.entries(Messages).map(([date, messageList])=>{
               return (
-                <div key={date} className="flex flex-col justify-end w-full gap-2 md:mb-2 mb-24" >
-                <div className="text-teal-light pl-10 py-5">{calculateTime(date)}</div>
+                <div key={date} className="flex flex-col justify-end w-full gap-2 md:mb-2 mb-4" >
+                <div className="text-secondary flex justify-center pl-10 py-5">
+                  <span className="text-[0.700rem] bg-incoming-background bottom-1 rounded-sm p-2" >{date}</span>
+                </div>
                 {messageList?.map((msg, index ) => (
-            <div key={index} className={`flex max-w-full ${msg.senderId === CurrentChatUser?.id ? "justify-start" : "justify-end"}`}>
+            <div key={index} className={`flex max-w-full ${msg.senderId === CurrentChatUser?.id ? "justify-start left" : "justify-end right"}`}>
               {msg.type === "text" && (
                 <div className={`text-white px-2 py-[5px] text-sm rounded-md flex gap-2 items-end max-w-[90%] ${msg.senderId === CurrentChatUser?.id ? "bg-incoming-background" : "bg-outgoing-background"}`}>
                   <p>{msg.message}</p>
                   <div className="flex gap-1 items-end">
-                    <span className="text-bubble-meta text-[11px] pt-1">{calculateTime(msg.createdAt)}</span>
+                    <span className="text-bubble-meta truncate text-[11px] pt-1">{getTime(msg.createdAt)}</span>
                     <span>{msg.senderId === UserInfo.id && <MessageStatus messageStatus={msg.messageStatus} />}</span>
                   </div>
                 </div>
@@ -60,6 +69,7 @@ function ChatContainer({socket}) {
               )
             })
           }
+        
          
         </div>
       </div>

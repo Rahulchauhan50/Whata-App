@@ -39,3 +39,55 @@
     z-index: -1;
     content: '';
 }
+
+.right {
+    position: relative;
+  }
+  
+  .right::before {
+    content: '';
+    position: absolute;
+    visibility: visible;
+    top: 0px;
+    right: -10px;
+    border: 10px solid transparent;
+    border-top: 10px solid #005c4b;
+  }
+  
+  .right::after {
+    content: '';
+    position: absolute;
+    visibility: visible;
+    top: 0px;
+    right: -8px;
+    border: 10px solid transparent;
+    border-top: 10px solid #005c4b;
+    clear: both;
+  }
+
+  .left {
+    position: relative;
+  }
+
+  .left::before {
+    content: '';
+    position: absolute;
+    visibility: visible;
+    top: 0px;
+    left: -10px;
+    border: 10px solid transparent;
+    border-top: 10px solid #202c33;
+  }
+
+  .left::after {
+    content: '';
+    position: absolute;
+    visibility: visible;
+    top: 0px;
+    left: -8px;
+    border: 10px solid transparent;
+    border-top: 10px solid #202c33;
+    clear: both;
+  }
+  
+  
