@@ -12,15 +12,12 @@ function ImageMessage({ message }) {
   const { UserInfo } = useSelector((state) => state.user);
 
   return (
-    <div
-      className={`p-1 rounded-lg ${
+    <div className={`p-1 rounded-lg ${
         message.senderId === CurrentChatUser.id
           ? "bg-incoming-background"
           : "bg-outgoing-background"
-      }`}
-    >
+      }`}>
       <div className="relative">
-         
         <Image
           src={message.message}
           className="rounded-lg"
@@ -41,7 +38,7 @@ function ImageMessage({ message }) {
         </div>
       </div>
     </div>
-  );
+  )
 }
 
 export default ImageMessage;

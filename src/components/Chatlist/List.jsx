@@ -44,7 +44,7 @@ function List({socket}) {
     }
     {isLoading &&
       [1,2,3,4,5,6,7].map((e)=>{
-        return <div key={e} className="border-b border-conversation-border shadow  p-4 max-w-sm w-full mx-auto">
+        return <div key={e} className="border-b border-conversation-border shadow p-4 w-full mx-auto">
         <div className="animate-pulse flex space-x-4">
           <div className="rounded-full bg-slate-700 h-10 w-10"></div>
           <div className="flex-1 space-y-6 py-1">

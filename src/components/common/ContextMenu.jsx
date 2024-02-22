@@ -23,7 +23,7 @@ function ContextMenu({ options , cordinate, contextMenu, setContextMenu}) {
     callback()
   }
 
-  return <div ref={contextMenuRef} style={{top:cordinate.y,left:cordinate.x}} className={`bg-dropdown-background fixed py-2 z-[100] shadow-xl`}>
+  return <div ref={contextMenuRef} style={{top:cordinate.y,left:cordinate.x}} className={`bg-dropdown-background fixed py-2 z-[100] shadow-xl rounded-md`}>
     <ul>
       {options.map(({name, callback})=>{
         return <li key={name} className="px-5 py-2 hover:bg-background-default-hover cursor-pointer" onClick={(e)=>{hadleClick(e, callback)}}><span className="text-white">{name}</span></li>

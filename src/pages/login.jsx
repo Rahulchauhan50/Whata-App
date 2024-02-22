@@ -93,15 +93,12 @@ function login() {
 
   }
 
-  return <div className='bg-cover bg-no-repeat bg-chat-background-img pt-[100px]'>
-     {/* <div
-    className="bg-chat-background opacity-5 w-full fixed top-0 right-0 bottom-0 "
-  ></div> */}
-    {/* <div className="flex bg-cover bg-no-repeat bg-chat-background-img justify-start items-center  h-[400px] w-screen flex-col">
-   
-    </div> */}
-    <div className='justify-center items-center mx-auto flex'>
-      <div style={{ boxShadow: "0 10px 30px rgba(0, 0, 0, 0.3), 0 4px 30px rgba(0, 0, 0, 0.3)", }} className='bg-search-input-container-background md:w-[80vw] w-[95vw] justify-start items-center mb-14 flex flex-col rounded-lg' >
+  return <>
+  <div className='bg-cover bg-no-repeat bg-[#26A884] pt-[100px] h-[200px]'>
+    
+  </div >
+  <div className='justify-center items-center mx-auto mt-[-100px] flex'>
+      <div style={{ boxShadow: "0 10px 30px rgba(0, 0, 0, 0.3), 0 4px 30px rgba(0, 0, 0, 0.3)", }} className='bg-[#ffffff] md:w-[80vw] w-[95vw] justify-start items-center mb-14 flex flex-col rounded-lg' >
         <div className='justify-start items-center flex flex-col mt-[100px]'>
           <div className='justify-start items-center flex-col font-[300] text-[18px] md:text-[28px] text-[#41525D] m-1'>
             {toggle?"Enter Phone number":"Enter Phone number"}
@@ -116,10 +113,10 @@ function login() {
           value={phoneNumber}
           onChange={handleChange}
           
-          /></div>):(<div style={{ boxShadow: "0 10px 30px rgba(0, 0, 0, 0.3), 0 4px 30px rgba(0, 0, 0, 0.3)", }} className='flex flex-row justify-between my-12'>
+          /></div>):(<div style={{ boxShadow: "0px 4px 0px rgba(250, 250, 250, 0.9), 0 4px 30px rgb(181 181 181 / 41%)", }} className='flex flex-row justify-between my-12'>
           <button
             onClick={handlelogin}
-            className="flex font-[600] items-center justify-center w-full h-[42px] py-2 px-4  text-white rounded-md shadow-md"
+            className="flex font-[600] items-center justify-center w-full h-[42px] py-2 px-4  text-slate-600 rounded-md shadow-md"
           >
             <img alt='googe' className="w-8 h-8 rounded-[10px]  my-4 cursor-pointer mr-2" src='./google.svg' />
             Sign In with Google
@@ -127,18 +124,19 @@ function login() {
         </div>)}
         </div>
         <div className='font-[400] md:text-[18px] text-[14px] text-[#008069] m-1 cursor-pointer' onClick={()=>{setToggled(!toggle)}}>{toggle?"Link with Google account":"Link with Phone Number"}</div>
-        <div className='mt-12 bg-panel-header-background w-full py-8' >
+       
+        <div className='mt-12 bg-[#F9F9FA] w-full py-8' >
           <div className='font-[300] items-center justify-center flex text-[18px] md:text-[28px] text-[#41525D] m-1'>
             Tutorial
           </div>
           <div className='font-[400] md:text-[14px] text-[12px] items-center justify-center flex text-[#008069] m-1'>Need help to get Started</div>
           <div className='flex items-center justify-center m-14'>
-          <Image src='/whatsapp.gif' alt="whatsapp" height={300} width={300} />
+          <Image src='/tutorial.png' alt="whatsapp" height={500} width={500} />
         </div>
       </div>
     </div>
   </div>
-  </div >
+  </>
 }
 
 export default login;

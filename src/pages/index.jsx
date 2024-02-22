@@ -16,22 +16,22 @@ function index() {
 
   useEffect(()=>{
     onAuthStateChanged(firebaseAuth,async (currentUser) => {
-      // if(!currentUser) router.push('/login')
+      if(!currentUser) router.push('/login')
       if(currentUser?.email){
         try {
           const {data} = await axios.post(CHECK_USER_ROUTE,{email:currentUser.email});
+          console.log(data)
           if(!data.status){
-            // router.push('/login')
+            router.push('/login')
           }
           else if(data.status){
-            console.log(data)
             dispatch(setUserInfo({name:data.data.name,email:data.data.email,profileImage:data.data.profileImage, status:"available",NewUser:false,id:data.data.id}));
             dispatch(setIsfetchingUser(false));
           }
         } catch (error) {
           console.log(error)
           dispatch(setIsfetchingUser(false));
-          // router.push('/login')
+          router.push('/login')
         }
        
       }
