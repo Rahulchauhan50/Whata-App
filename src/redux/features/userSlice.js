@@ -89,8 +89,8 @@ const UserSlice = createSlice({
         if(LastMsgDate === calculateTime(newDate.toString())){
           state.Messages[LastMsgDate].push(action.payload);
         }else {
-          alert(LastMsgDate)
-          alert(calculateTime(newDate.toString()))
+          // alert(LastMsgDate)
+          // alert(calculateTime(newDate.toString()))
           const newKey = calculateTime(newDate.toString())
           state.Messages[newKey] = [action.payload];
         }
