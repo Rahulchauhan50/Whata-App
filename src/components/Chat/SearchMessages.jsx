@@ -14,7 +14,10 @@ function SearchMessages() {
 
   useEffect(()=>{
     if(searchTrem){
-      setsearchedMessaged(Messages.filter(message=>message.type==="text" && message.message.includes(searchTrem)))
+      console.log(JSON.stringify(Messages))
+      setsearchedMessaged(Object.values(Messages).flat().filter(message =>
+        message.type === "text" && message.message.includes(searchTrem)
+    ))
     }else{
       setMessageSearch([])
     }
