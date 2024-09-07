@@ -29,7 +29,7 @@ function login() {
   setPhoneNumber(value)
  }
 
-  const handlelogin = async () => {
+  const handleLogin = async () => {
     try {
       const provider = new GoogleAuthProvider();
       signInWithRedirect(firebaseAuth, provider);
@@ -41,6 +41,7 @@ function login() {
   const handleRedirectResult = async () => {
     try {
       const result = await getRedirectResult(firebaseAuth);
+      console.log(result)
       const user = result.user;
 
       if (user) {
@@ -71,7 +72,7 @@ function login() {
     handleRedirectResult();
   }, []);
 
-  const handleLogin = async () => {
+  const handlelogin = async () => {
     const provider = new GoogleAuthProvider()
     const { user } = await signInWithPopup(firebaseAuth, provider)
     const email = user.email;
