@@ -34,21 +34,30 @@ function Main() {
   useEffect(() => {
     if (UserInfo?.id) {
       socket.current = io(HOST);
+      
+      // Listen for socket connection
       socket.current.on("connect", () => {
         dispatch(setSocket({ socketId: socket.current.id }));
+
       });
-      // socket.current.on("disconnect", () => {
-      //   // Perform actions when socket disconnects
-      //   console.log("Socket disconnected");
-      //   // Additional actions can be performed here
-      // });
+  
+      // Add user on connect
       socket.current.emit("add-user", UserInfo?.id);
-      // dispatch(setSocket({socketId: socket.current.id }));
+  
+      // Listen for socket disconnection
+      socket.current.on("disconnect", () => {
+       
+      });
+  
+      // Cleanup on component unmount
+      return () => {
+        socket.current.disconnect();
+      };
     }
   }, [UserInfo?.id]);
 
   const getContacts = async () =>{
-    // alert("sdhjhjs")
+
     try {
       const {data:{users,onlineUsers}} = await axios.get(`${GET_INITIAL_CONTACT_ROUTE}/${UserInfo?.id}`)
       dispatch(setUserContacts({userContacts:users}));
@@ -62,13 +71,13 @@ function Main() {
   useEffect(() => {
     if(socket.current){
     socket?.current?.on("msg-recieve", (data) => {
-      // alert("ddhjdh")
+  
       if(CurrentChatUser !== undefined && CurrentChatUser.id === data.senderId){
         dispatch(setAddMessages(data));
       }
       getContacts();
     });
-
+ 
     socket?.current?.on("incoming-voice-call", ({from,roomId,callType}) => {
       dispatch(setIncomingVoiceCall({incomingVoiceCall:{...from,roomId,callType}}));
     });
