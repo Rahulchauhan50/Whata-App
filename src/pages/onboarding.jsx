@@ -32,7 +32,7 @@ function onboarding() {
               email:UserInfo.email,
               name:UserInfo.name,
               about:UserInfo.about,
-              image:UserInfo.profileImage
+              image:UserInfo.profileImage?UserInfo.profileImage:UserInfo.profileImageTemp
               }
           })
           if(data.status){
